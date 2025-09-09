@@ -40,3 +40,30 @@
 2025-09-09 01:02:44 - chatbot.main - INFO - langchain_agent.py:76 - LangChain agent created successfully.
 2025-09-09 01:02:44 - chatbot.main - INFO - main.py:29 - Startup complete: Agent is ready to serve requests.
 2025-09-09 01:04:39 - chatbot.main - INFO - main.py:34 - Shutting down: Application is closing.
+2025-09-10 00:38:22 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 00:38:22 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 00:38:22 - chatbot.main - INFO - main.py:26 - Starting up: Initializing LangChain Agent...
+2025-09-10 00:38:22 - chatbot.main - INFO - langchain_agent.py:38 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 00:38:25 - chatbot.main - INFO - langchain_agent.py:74 - LangChain agent created successfully.
+2025-09-10 00:38:25 - chatbot.main - INFO - main.py:29 - Startup complete: Agent is ready to serve requests.
+2025-09-10 00:40:16 - chatbot.main - ERROR - main.py:89 - Error in chat endpoint: Got unsupported early_stopping_method `generate`
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\src\chatbot_backend\main.py", line 64, in chat_with_agent
+    result = agent_executor.invoke({
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\langchain\chains\base.py", line 165, in invoke
+    self._call(inputs, run_manager=run_manager)
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\langchain\agents\agent.py", line 1652, in _call
+    output = self._action_agent.return_stopped_response(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\langchain\agents\agent.py", line 312, in return_stopped_response
+    raise ValueError(msg)
+ValueError: Got unsupported early_stopping_method `generate`
+2025-09-10 00:42:35 - chatbot.main - INFO - main.py:34 - Shutting down: Application is closing.
+2025-09-10 00:45:30 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 00:45:30 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 00:45:30 - chatbot.main - INFO - main.py:26 - Starting up: Initializing LangChain Agent...
+2025-09-10 00:45:30 - chatbot.main - INFO - langchain_agent.py:38 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 00:45:33 - chatbot.main - INFO - langchain_agent.py:74 - LangChain agent created successfully.
+2025-09-10 00:45:33 - chatbot.main - INFO - main.py:29 - Startup complete: Agent is ready to serve requests.
+2025-09-10 00:48:22 - chatbot.main - INFO - main.py:34 - Shutting down: Application is closing.

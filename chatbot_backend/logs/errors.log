@@ -1,0 +1,13 @@
+2025-09-10 00:40:16 - chatbot.main - ERROR - main.py:89 - Error in chat endpoint: Got unsupported early_stopping_method `generate`
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\src\chatbot_backend\main.py", line 64, in chat_with_agent
+    result = agent_executor.invoke({
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\langchain\chains\base.py", line 165, in invoke
+    self._call(inputs, run_manager=run_manager)
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\langchain\agents\agent.py", line 1652, in _call
+    output = self._action_agent.return_stopped_response(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\langchain\agents\agent.py", line 312, in return_stopped_response
+    raise ValueError(msg)
+ValueError: Got unsupported early_stopping_method `generate`

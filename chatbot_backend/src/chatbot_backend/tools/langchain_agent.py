@@ -80,10 +80,10 @@ def create_agent() -> AgentExecutor:
         agent=agent, 
         tools=tools, 
         verbose=True,
-        max_iterations=2,
+        max_iterations=3,
         max_execution_time=30,
         return_intermediate_steps=True,
-        early_stopping_method="generate",
+        early_stopping_method="force",
         handle_parsing_errors=True
     )
 
