@@ -13,3 +13,7 @@
 2025-09-09 01:03:10 - chatbot.api - INFO - main.py:57 - Received chat request: hey (session_id=None)
 2025-09-09 01:03:28 - chatbot.api - INFO - main.py:57 - Received chat request: i want to track an order (session_id=None)
 2025-09-09 01:03:48 - chatbot.api - INFO - main.py:57 - Received chat request: tell me about the rug (session_id=None)
+2025-09-10 00:38:43 - chatbot.api - INFO - main.py:51 - Welcome endpoint called
+2025-09-10 00:40:00 - chatbot.api - INFO - main.py:57 - Received chat request: help me style my house (session_id=string)
+2025-09-10 00:46:46 - chatbot.api - INFO - main.py:51 - Welcome endpoint called
+2025-09-10 00:47:08 - chatbot.api - INFO - main.py:57 - Received chat request: jelp me style my house (session_id=string)
