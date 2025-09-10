@@ -23,3 +23,31 @@
 2025-09-10 08:45:43 - chatbot.api - INFO - main.py:57 - Received chat request: Help me style my house (session_id=string)
 2025-09-10 09:04:13 - chatbot.api - INFO - main.py:58 - Welcome endpoint called
 2025-09-10 09:04:49 - chatbot.api - INFO - main.py:76 - Received chat request: help me style my house (session_id=string)
+2025-09-10 09:23:57 - chatbot.api - INFO - main.py:58 - Welcome endpoint called
+2025-09-10 09:24:25 - chatbot.api - INFO - main.py:81 - Received CrewAI chat request: help me style my house (session_id=string)
+2025-09-10 09:41:05 - chatbot.api - INFO - main.py:58 - Welcome endpoint called
+2025-09-10 09:43:12 - chatbot.api - INFO - main.py:81 - Received CrewAI chat request: help me style my house (session_id=string)
+2025-09-10 11:17:41 - chatbot.api - INFO - main.py:70 - Welcome endpoint called
+2025-09-10 11:18:13 - chatbot.api - INFO - main.py:94 - Received CrewAI chat request: help me style my house (session_id=string)
+2025-09-10 11:19:11 - chatbot.api - INFO - main.py:94 - Received CrewAI chat request: help me track my order (session_id=string)
+2025-09-10 11:19:58 - chatbot.api - INFO - main.py:94 - Received CrewAI chat request: 12345 (session_id=string)
+2025-09-10 11:21:33 - chatbot.api - INFO - main.py:94 - Received CrewAI chat request: I want to return a sofa (session_id=string)
+2025-09-10 11:55:46 - chatbot.api - INFO - main.py:70 - Welcome endpoint called
+2025-09-10 11:56:17 - chatbot.api - INFO - main.py:94 - Received CrewAI chat request: hey (session_id=string)
+2025-09-10 11:57:20 - chatbot.api - INFO - main.py:94 - Received CrewAI chat request: I need to return an item (session_id=string)
+2025-09-10 12:01:52 - chatbot.api - INFO - main.py:70 - Welcome endpoint called
+2025-09-10 12:02:25 - chatbot.api - INFO - main.py:94 - Received CrewAI chat request: hey (session_id=string)
+2025-09-10 12:52:13 - chatbot.api - INFO - main.py:70 - Welcome endpoint called
+2025-09-10 12:52:33 - chatbot.api - INFO - main.py:94 - Received CrewAI chat request: hey (session_id=string)
+2025-09-10 13:01:13 - chatbot.api - INFO - main.py:94 - Received CrewAI chat request: tell me about the rug (session_id=string)
+2025-09-10 13:01:59 - chatbot.api - INFO - main.py:94 - Received CrewAI chat request: tell me about the rug that you have in your store (session_id=string)
+2025-09-10 13:06:56 - chatbot.api - INFO - main.py:70 - Welcome endpoint called
+2025-09-10 13:07:28 - chatbot.api - INFO - main.py:94 - Received CrewAI chat request: tell me about the rug in your store (session_id=string)
+2025-09-10 13:11:34 - chatbot.api - INFO - main.py:94 - Received CrewAI chat request: hello (session_id=string)
+2025-09-10 14:54:54 - chatbot.api - INFO - main.py:69 - Welcome endpoint called
+2025-09-10 14:55:20 - chatbot.api - INFO - main.py:93 - Received CrewAI chat request: help me style my house (session_id=string)
+2025-09-10 15:06:50 - chatbot.api - INFO - main.py:69 - Welcome endpoint called
+2025-09-10 15:07:16 - chatbot.api - INFO - main.py:121 - Received chat request: HELP ME STYLE MY HOUSE (session_id=string)
+2025-09-10 15:08:15 - chatbot.api - INFO - main.py:93 - Received CrewAI chat request: HELP ME STYLE MY HOUSE (session_id=string)
+2025-09-10 18:26:05 - chatbot.api - INFO - main.py:69 - Welcome endpoint called
+2025-09-10 18:26:39 - chatbot.api - INFO - main.py:121 - Received chat request: hey i need more info on the sofa (session_id=string)
