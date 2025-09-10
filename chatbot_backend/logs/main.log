@@ -103,3 +103,389 @@ Exception: Vector store initialization failed
 2025-09-10 09:04:03 - chatbot.main - INFO - langchain_agent.py:47 - Initializing LangChain Agent with Groq LLM...
 2025-09-10 09:04:06 - chatbot.main - INFO - langchain_agent.py:83 - LangChain agent created successfully.
 2025-09-10 09:04:06 - chatbot.main - INFO - main.py:36 - Startup complete: Agent is ready to serve requests.
+2025-09-10 09:07:45 - chatbot.main - INFO - main.py:41 - Shutting down: Application is closing.
+2025-09-10 09:21:19 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 09:21:19 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 09:21:19 - chatbot.main - INFO - main.py:27 - Starting up: Initializing LangChain Agent...
+2025-09-10 09:21:19 - chatbot.main - INFO - main.py:30 - Initializing vector store...
+2025-09-10 09:21:29 - chatbot.main - INFO - main.py:32 - Vector store initialized successfully.
+2025-09-10 09:21:29 - chatbot.main - INFO - langchain_agent.py:47 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 09:21:32 - chatbot.main - INFO - langchain_agent.py:83 - LangChain agent created successfully.
+2025-09-10 09:21:32 - chatbot.main - INFO - main.py:36 - Startup complete: Agent is ready to serve requests.
+2025-09-10 09:24:25 - chatbot.main - ERROR - main.py:99 - Error in CrewAI endpoint: name 'crew_service' is not defined
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\src\chatbot_backend\main.py", line 83, in chat_with_crew
+    if not crew_service or not crew_service._initialized:
+           ^^^^^^^^^^^^
+NameError: name 'crew_service' is not defined
+2025-09-10 09:24:37 - chatbot.main - INFO - main.py:41 - Shutting down: Application is closing.
+2025-09-10 09:38:42 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 09:38:42 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 09:38:42 - chatbot.main - INFO - main.py:27 - Starting up: Initializing LangChain Agent...
+2025-09-10 09:38:42 - chatbot.main - INFO - main.py:30 - Initializing vector store...
+2025-09-10 09:38:53 - chatbot.main - INFO - main.py:32 - Vector store initialized successfully.
+2025-09-10 09:38:53 - chatbot.main - INFO - langchain_agent.py:47 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 09:38:56 - chatbot.main - INFO - langchain_agent.py:83 - LangChain agent created successfully.
+2025-09-10 09:38:56 - chatbot.main - INFO - main.py:36 - Startup complete: Agent is ready to serve requests.
+2025-09-10 09:41:54 - chatbot.main - ERROR - main.py:75 - Health check failed: name 'crew_service' is not defined
+2025-09-10 09:43:12 - chatbot.main - ERROR - main.py:99 - Error in CrewAI endpoint: name 'crew_service' is not defined
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\src\chatbot_backend\main.py", line 83, in chat_with_crew
+    if not crew_service or not crew_service._initialized:
+           ^^^^^^^^^^^^
+NameError: name 'crew_service' is not defined
+2025-09-10 09:45:54 - chatbot.main - INFO - main.py:41 - Shutting down: Application is closing.
+2025-09-10 11:15:28 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 11:15:28 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 11:15:28 - chatbot.main - INFO - main.py:31 - Starting up: Initializing LangChain Agent...
+2025-09-10 11:15:28 - chatbot.main - INFO - main.py:34 - Initializing vector store...
+2025-09-10 11:15:30 - chatbot.main - INFO - main.py:36 - Vector store initialized successfully.
+2025-09-10 11:15:30 - chatbot.main - INFO - langchain_agent.py:47 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 11:15:31 - chatbot.main - INFO - langchain_agent.py:83 - LangChain agent created successfully.
+2025-09-10 11:15:31 - chatbot.main - INFO - main.py:40 - LangChain agent created successfully.
+2025-09-10 11:15:31 - chatbot.main - INFO - main.py:43 - Initializing CrewAI service...
+2025-09-10 11:15:31 - chatbot.main - INFO - crew_service.py:38 - Initializing CrewAI service...
+2025-09-10 11:15:31 - chatbot.main - INFO - crew_service.py:89 - Initialized OrderTrackingTool successfully
+2025-09-10 11:15:31 - chatbot.main - INFO - crew_service.py:89 - Initialized ReturnsTool successfully
+2025-09-10 11:15:31 - chatbot.main - INFO - crew_service.py:89 - Initialized StyleAdvisorTool successfully
+2025-09-10 11:15:31 - chatbot.main - INFO - crew_service.py:89 - Initialized ProductInfoTool successfully
+2025-09-10 11:15:31 - chatbot.main - INFO - crew_service.py:95 - Total tools initialized: 4
+2025-09-10 11:15:31 - chatbot.main - INFO - crew_service.py:66 - CrewAI service initialized successfully
+2025-09-10 11:15:31 - chatbot.main - INFO - main.py:46 - CrewAI service initialized successfully.
+2025-09-10 11:15:31 - chatbot.main - INFO - main.py:48 - Startup complete: Agents are ready to serve requests.
+2025-09-10 11:17:19 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 11:17:19 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 11:17:19 - chatbot.main - INFO - main.py:31 - Starting up: Initializing LangChain Agent...
+2025-09-10 11:17:19 - chatbot.main - INFO - main.py:34 - Initializing vector store...
+2025-09-10 11:17:28 - chatbot.main - INFO - main.py:36 - Vector store initialized successfully.
+2025-09-10 11:17:28 - chatbot.main - INFO - langchain_agent.py:47 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 11:17:31 - chatbot.main - INFO - langchain_agent.py:83 - LangChain agent created successfully.
+2025-09-10 11:17:31 - chatbot.main - INFO - main.py:40 - LangChain agent created successfully.
+2025-09-10 11:17:31 - chatbot.main - INFO - main.py:43 - Initializing CrewAI service...
+2025-09-10 11:17:31 - chatbot.main - INFO - crew_service.py:38 - Initializing CrewAI service...
+2025-09-10 11:17:31 - chatbot.main - INFO - crew_service.py:89 - Initialized OrderTrackingTool successfully
+2025-09-10 11:17:31 - chatbot.main - INFO - crew_service.py:89 - Initialized ReturnsTool successfully
+2025-09-10 11:17:31 - chatbot.main - INFO - crew_service.py:89 - Initialized StyleAdvisorTool successfully
+2025-09-10 11:17:31 - chatbot.main - INFO - crew_service.py:89 - Initialized ProductInfoTool successfully
+2025-09-10 11:17:31 - chatbot.main - INFO - crew_service.py:95 - Total tools initialized: 4
+2025-09-10 11:17:31 - chatbot.main - INFO - crew_service.py:66 - CrewAI service initialized successfully
+2025-09-10 11:17:31 - chatbot.main - INFO - main.py:46 - CrewAI service initialized successfully.
+2025-09-10 11:17:31 - chatbot.main - INFO - main.py:48 - Startup complete: Agents are ready to serve requests.
+2025-09-10 11:18:16 - chatbot.main - INFO - crew_service.py:202 - Query routed to: style
+2025-09-10 11:18:17 - chatbot.main - INFO - crew_tools.py:67 - Getting style recommendations for: help me style my house
+2025-09-10 11:18:18 - chatbot.main - INFO - crew_tools.py:67 - Getting style recommendations for: help me style my house
+2025-09-10 11:19:12 - chatbot.main - INFO - crew_service.py:202 - Query routed to: track
+2025-09-10 11:19:16 - chatbot.main - INFO - crew_tools.py:34 - Tracking order: Please provide the order ID
+2025-09-10 11:19:18 - chatbot.main - INFO - crew_tools.py:34 - Tracking order: Please provide the order ID
+2025-09-10 11:19:21 - chatbot.main - INFO - crew_tools.py:34 - Tracking order: 12345
+2025-09-10 11:19:24 - chatbot.main - INFO - crew_tools.py:34 - Tracking order: 12345
+2025-09-10 11:19:27 - chatbot.main - INFO - crew_tools.py:34 - Tracking order: Please provide your order ID
+2025-09-10 11:19:29 - chatbot.main - INFO - crew_tools.py:34 - Tracking order: Please provide your order ID
+2025-09-10 11:20:02 - chatbot.main - INFO - crew_service.py:202 - Query routed to: track
+2025-09-10 11:20:13 - chatbot.main - INFO - crew_tools.py:34 - Tracking order: 12345
+2025-09-10 11:20:15 - chatbot.main - INFO - crew_tools.py:34 - Tracking order: 12345
+2025-09-10 11:20:19 - chatbot.main - INFO - crew_tools.py:34 - Tracking order: 67890
+2025-09-10 11:20:21 - chatbot.main - INFO - crew_tools.py:34 - Tracking order: 67890
+2025-09-10 11:20:28 - chatbot.main - INFO - crew_tools.py:34 - Tracking order: 123456
+2025-09-10 11:20:30 - chatbot.main - INFO - crew_tools.py:34 - Tracking order: 123456
+2025-09-10 11:21:34 - chatbot.main - INFO - crew_service.py:202 - Query routed to: return
+2025-09-10 11:21:35 - chatbot.main - INFO - crew_tools.py:177 - Processing return request: I want to return a sofa
+2025-09-10 11:21:35 - chatbot.main - INFO - crew_tools.py:177 - Processing return request: I want to return a sofa
+2025-09-10 11:24:28 - chatbot.main - INFO - main.py:53 - Shutting down: Application is closing.
+2025-09-10 11:55:05 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 11:55:05 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 11:55:05 - chatbot.main - INFO - main.py:31 - Starting up: Initializing LangChain Agent...
+2025-09-10 11:55:06 - chatbot.main - INFO - main.py:34 - Initializing vector store...
+2025-09-10 11:55:16 - chatbot.main - INFO - main.py:36 - Vector store initialized successfully.
+2025-09-10 11:55:16 - chatbot.main - INFO - langchain_agent.py:47 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 11:55:19 - chatbot.main - INFO - langchain_agent.py:83 - LangChain agent created successfully.
+2025-09-10 11:55:19 - chatbot.main - INFO - main.py:40 - LangChain agent created successfully.
+2025-09-10 11:55:19 - chatbot.main - INFO - main.py:43 - Initializing CrewAI service...
+2025-09-10 11:55:19 - chatbot.main - INFO - crew_service.py:40 - Initializing CrewAI service...
+2025-09-10 11:55:19 - chatbot.main - INFO - crew_service.py:91 - Initialized OrderApiTool successfully
+2025-09-10 11:55:19 - chatbot.main - INFO - crew_service.py:91 - Initialized ReturnsTool successfully
+2025-09-10 11:55:19 - chatbot.main - INFO - crew_service.py:91 - Initialized StyleAdvisorTool successfully
+2025-09-10 11:55:19 - chatbot.main - INFO - crew_service.py:91 - Initialized ProductInfoTool successfully
+2025-09-10 11:55:19 - chatbot.main - INFO - crew_service.py:97 - Total tools initialized: 4
+2025-09-10 11:55:20 - chatbot.main - INFO - crew_service.py:68 - CrewAI service initialized successfully
+2025-09-10 11:55:20 - chatbot.main - INFO - main.py:46 - CrewAI service initialized successfully.
+2025-09-10 11:55:20 - chatbot.main - INFO - main.py:48 - Startup complete: Agents are ready to serve requests.
+2025-09-10 11:56:21 - chatbot.main - INFO - crew_service.py:204 - Query routed to: info
+2025-09-10 11:57:22 - chatbot.main - INFO - crew_service.py:204 - Query routed to: return
+2025-09-10 11:59:11 - chatbot.main - INFO - main.py:53 - Shutting down: Application is closing.
+2025-09-10 12:01:05 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 12:01:05 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 12:01:05 - chatbot.main - INFO - main.py:31 - Starting up: Initializing LangChain Agent...
+2025-09-10 12:01:05 - chatbot.main - INFO - main.py:34 - Initializing vector store...
+2025-09-10 12:01:15 - chatbot.main - INFO - main.py:36 - Vector store initialized successfully.
+2025-09-10 12:01:15 - chatbot.main - INFO - langchain_agent.py:47 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 12:01:19 - chatbot.main - INFO - langchain_agent.py:83 - LangChain agent created successfully.
+2025-09-10 12:01:19 - chatbot.main - INFO - main.py:40 - LangChain agent created successfully.
+2025-09-10 12:01:19 - chatbot.main - INFO - main.py:43 - Initializing CrewAI service...
+2025-09-10 12:01:19 - chatbot.main - INFO - crew_service.py:40 - Initializing CrewAI service...
+2025-09-10 12:01:19 - chatbot.main - INFO - crew_service.py:91 - Initialized OrderApiTool successfully
+2025-09-10 12:01:19 - chatbot.main - INFO - crew_service.py:91 - Initialized ReturnsTool successfully
+2025-09-10 12:01:19 - chatbot.main - INFO - crew_service.py:91 - Initialized StyleAdvisorTool successfully
+2025-09-10 12:01:19 - chatbot.main - INFO - crew_service.py:91 - Initialized ProductInfoTool successfully
+2025-09-10 12:01:19 - chatbot.main - INFO - crew_service.py:97 - Total tools initialized: 4
+2025-09-10 12:01:19 - chatbot.main - INFO - crew_service.py:68 - CrewAI service initialized successfully
+2025-09-10 12:01:19 - chatbot.main - INFO - main.py:46 - CrewAI service initialized successfully.
+2025-09-10 12:01:19 - chatbot.main - INFO - main.py:48 - Startup complete: Agents are ready to serve requests.
+2025-09-10 12:02:31 - chatbot.main - INFO - crew_service.py:204 - Query routed to: info
+2025-09-10 12:02:34 - chatbot.main - ERROR - crew_service.py:237 - Error processing query: litellm.InternalServerError: litellm.InternalServerError: VertexAIException - {
+  "error": {
+    "code": 503,
+    "message": "The model is overloaded. Please try again later.",
+    "status": "UNAVAILABLE"
+  }
+}
+Traceback (most recent call last):
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\litellm\llms\vertex_ai\gemini\vertex_and_google_ai_studio_gemini.py", line 1890, in completion
+    response = client.post(url=url, headers=headers, json=data)  # type: ignore
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\litellm\llms\custom_httpx\http_handler.py", line 780, in post
+    raise e
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\litellm\llms\custom_httpx\http_handler.py", line 762, in post
+    response.raise_for_status()
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Server error '503 Service Unavailable' for url 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDc1b964Iqbq5VGFhq8ndaBirDdbCs_9DU'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\litellm\main.py", line 2606, in completion
+    response = vertex_chat_completion.completion(  # type: ignore
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\litellm\llms\vertex_ai\gemini\vertex_and_google_ai_studio_gemini.py", line 1894, in completion
+    raise VertexAIError(
+litellm.llms.vertex_ai.common_utils.VertexAIError: {
+  "error": {
+    "code": 503,
+    "message": "The model is overloaded. Please try again later.",
+    "status": "UNAVAILABLE"
+  }
+}
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\src\chatbot_backend\crew_service.py", line 233, in process_query
+    result = final_crew.kickoff()
+             ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\crewai\crew.py", line 662, in kickoff
+    result = self._run_sequential_process()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\crewai\crew.py", line 776, in _run_sequential_process
+    return self._execute_tasks(self.tasks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\crewai\crew.py", line 879, in _execute_tasks
+    task_output = task.execute_sync(
+                  ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\crewai\task.py", line 381, in execute_sync
+    return self._execute_core(agent, context, tools)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\crewai\task.py", line 529, in _execute_core
+    raise e  # Re-raise the exception after emitting the event
+    ^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\crewai\task.py", line 445, in _execute_core
+    result = agent.execute_task(
+             ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\crewai\agent.py", line 475, in execute_task
+    raise e
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\crewai\agent.py", line 451, in execute_task
+    result = self._execute_without_timeout(task_prompt, task)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\crewai\agent.py", line 547, in _execute_without_timeout
+    return self.agent_executor.invoke(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\crewai\agents\crew_agent_executor.py", line 114, in invoke
+    formatted_answer = self._invoke_loop()
+                       ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\crewai\agents\crew_agent_executor.py", line 207, in _invoke_loop
+    raise e
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\crewai\agents\crew_agent_executor.py", line 153, in _invoke_loop
+    answer = get_llm_response(
+             ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\crewai\utilities\agent_utils.py", line 161, in get_llm_response
+    raise e
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\crewai\utilities\agent_utils.py", line 154, in get_llm_response
+    answer = llm.call(
+             ^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\crewai\llm.py", line 1032, in call
+    return self._handle_non_streaming_response(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\crewai\llm.py", line 813, in _handle_non_streaming_response
+    response = litellm.completion(**params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\litellm\utils.py", line 1330, in wrapper
+    raise e
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\litellm\utils.py", line 1205, in wrapper
+    result = original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\litellm\main.py", line 3427, in completion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\litellm\litellm_core_utils\exception_mapping_utils.py", line 2301, in exception_type
+    raise e
+  File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\litellm\litellm_core_utils\exception_mapping_utils.py", line 1284, in exception_type
+    raise litellm.InternalServerError(
+litellm.exceptions.InternalServerError: litellm.InternalServerError: litellm.InternalServerError: VertexAIException - {
+  "error": {
+    "code": 503,
+    "message": "The model is overloaded. Please try again later.",
+    "status": "UNAVAILABLE"
+  }
+}
+
+2025-09-10 12:04:32 - chatbot.main - INFO - main.py:53 - Shutting down: Application is closing.
+2025-09-10 12:50:36 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 12:50:36 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 12:50:36 - chatbot.main - INFO - main.py:31 - Starting up: Initializing LangChain Agent...
+2025-09-10 12:50:36 - chatbot.main - INFO - main.py:34 - Initializing vector store...
+2025-09-10 12:50:45 - chatbot.main - INFO - main.py:36 - Vector store initialized successfully.
+2025-09-10 12:50:45 - chatbot.main - INFO - langchain_agent.py:47 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 12:50:48 - chatbot.main - INFO - langchain_agent.py:83 - LangChain agent created successfully.
+2025-09-10 12:50:48 - chatbot.main - INFO - main.py:40 - LangChain agent created successfully.
+2025-09-10 12:50:48 - chatbot.main - INFO - main.py:43 - Initializing CrewAI service...
+2025-09-10 12:50:48 - chatbot.main - INFO - crew_service.py:40 - Initializing CrewAI service...
+2025-09-10 12:50:48 - chatbot.main - INFO - crew_service.py:91 - Initialized OrderApiTool successfully
+2025-09-10 12:50:48 - chatbot.main - INFO - crew_service.py:91 - Initialized ReturnsTool successfully
+2025-09-10 12:50:48 - chatbot.main - INFO - crew_service.py:91 - Initialized StyleAdvisorTool successfully
+2025-09-10 12:50:48 - chatbot.main - INFO - crew_service.py:91 - Initialized ProductInfoTool successfully
+2025-09-10 12:50:48 - chatbot.main - INFO - crew_service.py:97 - Total tools initialized: 4
+2025-09-10 12:50:48 - chatbot.main - INFO - crew_service.py:68 - CrewAI service initialized successfully
+2025-09-10 12:50:48 - chatbot.main - INFO - main.py:46 - CrewAI service initialized successfully.
+2025-09-10 12:50:48 - chatbot.main - INFO - main.py:48 - Startup complete: Agents are ready to serve requests.
+2025-09-10 12:52:41 - chatbot.main - INFO - crew_service.py:204 - Query routed to: info
+2025-09-10 13:01:15 - chatbot.main - INFO - crew_service.py:204 - Query routed to: info
+2025-09-10 13:02:30 - chatbot.main - INFO - crew_service.py:204 - Query routed to: info
+2025-09-10 13:04:10 - chatbot.main - INFO - main.py:53 - Shutting down: Application is closing.
+2025-09-10 13:06:19 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 13:06:19 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 13:06:19 - chatbot.main - INFO - main.py:31 - Starting up: Initializing LangChain Agent...
+2025-09-10 13:06:19 - chatbot.main - INFO - main.py:34 - Initializing vector store...
+2025-09-10 13:06:29 - chatbot.main - INFO - main.py:36 - Vector store initialized successfully.
+2025-09-10 13:06:29 - chatbot.main - INFO - langchain_agent.py:47 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 13:06:32 - chatbot.main - INFO - langchain_agent.py:83 - LangChain agent created successfully.
+2025-09-10 13:06:32 - chatbot.main - INFO - main.py:40 - LangChain agent created successfully.
+2025-09-10 13:06:32 - chatbot.main - INFO - main.py:43 - Initializing CrewAI service...
+2025-09-10 13:06:32 - chatbot.main - INFO - crew_service.py:40 - Initializing CrewAI service...
+2025-09-10 13:06:32 - chatbot.main - INFO - crew_service.py:91 - Initialized OrderApiTool successfully
+2025-09-10 13:06:32 - chatbot.main - INFO - crew_service.py:91 - Initialized ReturnsTool successfully
+2025-09-10 13:06:32 - chatbot.main - INFO - crew_service.py:91 - Initialized StyleAdvisorTool successfully
+2025-09-10 13:06:32 - chatbot.main - INFO - crew_service.py:91 - Initialized ProductInfoTool successfully
+2025-09-10 13:06:32 - chatbot.main - INFO - crew_service.py:97 - Total tools initialized: 4
+2025-09-10 13:06:32 - chatbot.main - INFO - crew_service.py:68 - CrewAI service initialized successfully
+2025-09-10 13:06:32 - chatbot.main - INFO - main.py:46 - CrewAI service initialized successfully.
+2025-09-10 13:06:32 - chatbot.main - INFO - main.py:48 - Startup complete: Agents are ready to serve requests.
+2025-09-10 13:07:46 - chatbot.main - INFO - crew_service.py:204 - Query routed to: info
+2025-09-10 13:07:48 - chatbot.main - INFO - crew_tools.py:95 - Getting product info for: tell me about the rug in your store
+2025-09-10 13:07:49 - chatbot.main - INFO - crew_tools.py:95 - Getting product info for: tell me about the rug in your store
+2025-09-10 13:11:36 - chatbot.main - INFO - crew_service.py:204 - Query routed to: info
+2025-09-10 13:11:37 - chatbot.main - INFO - crew_tools.py:95 - Getting product info for: hello
+2025-09-10 13:11:37 - chatbot.main - INFO - crew_tools.py:95 - Getting product info for: hello
+2025-09-10 13:12:00 - chatbot.main - INFO - main.py:53 - Shutting down: Application is closing.
+2025-09-10 14:51:11 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 14:51:11 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 14:51:11 - chatbot.main - INFO - main.py:30 - Starting up: Initializing LangChain Agent...
+2025-09-10 14:51:11 - chatbot.main - INFO - main.py:33 - Initializing vector store...
+2025-09-10 14:51:11 - chatbot.main - ERROR - main.py:49 - Failed to initialize agent: Failed to initialize VectorStoreClient: COHERE_API_KEY environment variable not set.
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\services\vector_store.py", line 24, in __init__
+    raise ValueError("COHERE_API_KEY environment variable not set.")
+ValueError: COHERE_API_KEY environment variable not set.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\src\chatbot_backend\main.py", line 34, in lifespan
+    get_vector_client()
+  File "C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\src\chatbot_backend\tools\custom_tool.py", line 29, in get_vector_client
+    _vector_client = VectorStoreClient()
+                     ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\services\vector_store.py", line 49, in __init__
+    raise RuntimeError(f"Failed to initialize VectorStoreClient: {e}")
+RuntimeError: Failed to initialize VectorStoreClient: COHERE_API_KEY environment variable not set.
+2025-09-10 14:54:24 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 14:54:24 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 14:54:24 - chatbot.main - INFO - main.py:30 - Starting up: Initializing LangChain Agent...
+2025-09-10 14:54:24 - chatbot.main - INFO - main.py:33 - Initializing vector store...
+2025-09-10 14:54:28 - chatbot.main - INFO - main.py:35 - Vector store initialized successfully.
+2025-09-10 14:54:28 - chatbot.main - INFO - langchain_agent.py:47 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 14:54:30 - chatbot.main - INFO - langchain_agent.py:83 - LangChain agent created successfully.
+2025-09-10 14:54:30 - chatbot.main - INFO - main.py:39 - LangChain agent created successfully.
+2025-09-10 14:54:30 - chatbot.main - INFO - main.py:42 - Initializing CrewAI service...
+2025-09-10 14:54:30 - chatbot.main - INFO - crew_service.py:38 - Initializing CrewAI service...
+2025-09-10 14:54:30 - chatbot.main - INFO - crew_service.py:89 - Initialized OrderApiTool successfully
+2025-09-10 14:54:30 - chatbot.main - INFO - crew_service.py:89 - Initialized ReturnsTool successfully
+2025-09-10 14:54:30 - chatbot.main - INFO - crew_service.py:89 - Initialized StyleAdvisorTool successfully
+2025-09-10 14:54:30 - chatbot.main - INFO - crew_service.py:89 - Initialized ProductInfoTool successfully
+2025-09-10 14:54:30 - chatbot.main - INFO - crew_service.py:95 - Total tools initialized: 4
+2025-09-10 14:54:30 - chatbot.main - INFO - crew_service.py:66 - CrewAI service initialized successfully
+2025-09-10 14:54:30 - chatbot.main - INFO - main.py:45 - CrewAI service initialized successfully.
+2025-09-10 14:54:30 - chatbot.main - INFO - main.py:47 - Startup complete: Agents are ready to serve requests.
+2025-09-10 14:55:23 - chatbot.main - INFO - crew_service.py:202 - Query routed to: style
+2025-09-10 14:55:24 - chatbot.main - INFO - crew_tools.py:33 - Getting style recommendations for: help me style my house
+2025-09-10 14:55:26 - chatbot.main - INFO - crew_tools.py:33 - Getting style recommendations for: help me style my house
+2025-09-10 14:56:17 - chatbot.main - INFO - main.py:52 - Shutting down: Application is closing.
+2025-09-10 14:57:08 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 14:57:08 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 14:57:08 - chatbot.main - INFO - main.py:30 - Starting up: Initializing LangChain Agent...
+2025-09-10 14:57:08 - chatbot.main - INFO - main.py:33 - Initializing vector store...
+2025-09-10 14:57:13 - chatbot.main - INFO - main.py:35 - Vector store initialized successfully.
+2025-09-10 14:57:13 - chatbot.main - INFO - langchain_agent.py:47 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 14:57:16 - chatbot.main - INFO - langchain_agent.py:83 - LangChain agent created successfully.
+2025-09-10 14:57:16 - chatbot.main - INFO - main.py:39 - LangChain agent created successfully.
+2025-09-10 14:57:16 - chatbot.main - INFO - main.py:42 - Initializing CrewAI service...
+2025-09-10 14:57:16 - chatbot.main - INFO - crew_service.py:38 - Initializing CrewAI service...
+2025-09-10 14:57:16 - chatbot.main - INFO - crew_service.py:89 - Initialized OrderApiTool successfully
+2025-09-10 14:57:16 - chatbot.main - INFO - crew_service.py:89 - Initialized ReturnsTool successfully
+2025-09-10 14:57:16 - chatbot.main - INFO - crew_service.py:89 - Initialized StyleAdvisorTool successfully
+2025-09-10 14:57:16 - chatbot.main - INFO - crew_service.py:89 - Initialized ProductInfoTool successfully
+2025-09-10 14:57:16 - chatbot.main - INFO - crew_service.py:95 - Total tools initialized: 4
+2025-09-10 14:57:16 - chatbot.main - INFO - crew_service.py:66 - CrewAI service initialized successfully
+2025-09-10 14:57:16 - chatbot.main - INFO - main.py:45 - CrewAI service initialized successfully.
+2025-09-10 14:57:16 - chatbot.main - INFO - main.py:47 - Startup complete: Agents are ready to serve requests.
+2025-09-10 14:57:46 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 14:57:46 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 14:57:46 - chatbot.main - INFO - main.py:30 - Starting up: Initializing LangChain Agent...
+2025-09-10 14:57:46 - chatbot.main - INFO - main.py:33 - Initializing vector store...
+2025-09-10 14:57:51 - chatbot.main - INFO - main.py:35 - Vector store initialized successfully.
+2025-09-10 14:57:51 - chatbot.main - INFO - langchain_agent.py:47 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 14:57:53 - chatbot.main - INFO - langchain_agent.py:83 - LangChain agent created successfully.
+2025-09-10 14:57:53 - chatbot.main - INFO - main.py:39 - LangChain agent created successfully.
+2025-09-10 14:57:53 - chatbot.main - INFO - main.py:42 - Initializing CrewAI service...
+2025-09-10 14:57:53 - chatbot.main - INFO - crew_service.py:38 - Initializing CrewAI service...
+2025-09-10 14:57:53 - chatbot.main - INFO - crew_service.py:89 - Initialized OrderApiTool successfully
+2025-09-10 14:57:53 - chatbot.main - INFO - crew_service.py:89 - Initialized ReturnsTool successfully
+2025-09-10 14:57:53 - chatbot.main - INFO - crew_service.py:89 - Initialized StyleAdvisorTool successfully
+2025-09-10 14:57:53 - chatbot.main - INFO - crew_service.py:89 - Initialized ProductInfoTool successfully
+2025-09-10 14:57:53 - chatbot.main - INFO - crew_service.py:95 - Total tools initialized: 4
+2025-09-10 14:57:53 - chatbot.main - INFO - crew_service.py:66 - CrewAI service initialized successfully
+2025-09-10 14:57:53 - chatbot.main - INFO - main.py:45 - CrewAI service initialized successfully.
+2025-09-10 14:57:53 - chatbot.main - INFO - main.py:47 - Startup complete: Agents are ready to serve requests.
+2025-09-10 15:03:30 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 15:03:30 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 15:03:30 - chatbot.main - INFO - main.py:30 - Starting up: Initializing LangChain Agent...
+2025-09-10 15:03:30 - chatbot.main - INFO - main.py:33 - Initializing vector store...
+2025-09-10 15:03:34 - chatbot.main - INFO - main.py:35 - Vector store initialized successfully.
+2025-09-10 15:03:34 - chatbot.main - INFO - langchain_agent.py:47 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 15:03:36 - chatbot.main - INFO - langchain_agent.py:83 - LangChain agent created successfully.
+2025-09-10 15:03:36 - chatbot.main - INFO - main.py:39 - LangChain agent created successfully.
+2025-09-10 15:03:36 - chatbot.main - INFO - main.py:42 - Initializing CrewAI service...
+2025-09-10 15:03:36 - chatbot.main - INFO - crew_service.py:38 - Initializing CrewAI service...
+2025-09-10 15:03:36 - chatbot.main - INFO - crew_service.py:89 - Initialized OrderApiTool successfully
+2025-09-10 15:03:36 - chatbot.main - INFO - crew_service.py:89 - Initialized ReturnsTool successfully
+2025-09-10 15:03:36 - chatbot.main - INFO - crew_service.py:89 - Initialized StyleAdvisorTool successfully
+2025-09-10 15:03:36 - chatbot.main - INFO - crew_service.py:89 - Initialized ProductInfoTool successfully
+2025-09-10 15:03:36 - chatbot.main - INFO - crew_service.py:95 - Total tools initialized: 4
+2025-09-10 15:03:36 - chatbot.main - INFO - crew_service.py:66 - CrewAI service initialized successfully
+2025-09-10 15:03:36 - chatbot.main - INFO - main.py:45 - CrewAI service initialized successfully.
+2025-09-10 15:03:36 - chatbot.main - INFO - main.py:47 - Startup complete: Agents are ready to serve requests.
+2025-09-10 15:08:19 - chatbot.main - INFO - crew_service.py:202 - Query routed to: style
+2025-09-10 15:08:21 - chatbot.main - INFO - crew_tools.py:33 - Getting style recommendations for: To help me style your house, I need some more information. Please tell me: 1. What style are you going for (e.g., modern, farmhouse, bohemian, minimalist)? 2. Which room(s) are you looking to style? 3. What is your budget? 4. Are there any specific colors or materials you prefer or want to avoid? 5. Do you have any existing furniture or decor you'd like to incorporate?
+2025-09-10 15:08:22 - chatbot.main - INFO - crew_tools.py:33 - Getting style recommendations for: To help me style your house, I need some more information. Please tell me: 1. What style are you going for (e.g., modern, farmhouse, bohemian, minimalist)? 2. Which room(s) are you looking to style? 3. What is your budget? 4. Are there any specific colors or materials you prefer or want to avoid? 5. Do you have any existing furniture or decor you'd like to incorporate?
+2025-09-10 18:29:38 - chatbot.main - INFO - main.py:52 - Shutting down: Application is closing.
