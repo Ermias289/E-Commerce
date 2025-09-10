@@ -2,14 +2,10 @@ import json
 import os
 import glob
 import uuid
-import shutil
-import tempfile
 import time
-from typing import List, Dict
-from chromadb import PersistentClient
-from chromadb.api.types import EmbeddingFunction, Documents
+from typing import List, Dict, Optional
 import cohere
-import numpy as np
+from pinecone import Pinecone, ServerlessSpec, PodSpec
 
 try:
     from dotenv import load_dotenv
@@ -19,283 +15,135 @@ except ImportError:
     print("python-dotenv not installed. Install with: pip install python-dotenv")
     print("Or set environment variables manually")
 
+# Environment variables
 COHERE_API_KEY = os.environ.get("COHERE_API_KEY")
+PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
+PINECONE_ENVIRONMENT = os.environ.get("PINECONE_ENVIRONMENT", "us-east-1")
+INDEX_NAME = "luxe"
 
-class CustomCohereEmbeddingFunction(EmbeddingFunction):
+class VectorStoreClient:
     """
-    Custom Cohere embedding function that properly formats embeddings for ChromaDB
+    A client to handle all vector database interactions using Pinecone.
     """
-    def __init__(self, api_key: str, model_name: str = "embed-english-v3.0"):
-        self.client = cohere.Client(api_key)
-        self.model_name = model_name
     
-    def __call__(self, input: Documents) -> List[List[float]]:
+    def __init__(self, index_name: str = INDEX_NAME, dimension: int = 1024):
         """
-        Generate embeddings for the given documents
+        Initializes the Pinecone vector database client.
+        
+        Args:
+            index_name: Name of the Pinecone index
+            dimension: Dimension of the embeddings (Cohere embed-english-v3.0 uses 1024)
         """
+        self.index_name = index_name
+        self.dimension = dimension
+        
         try:
-            # Handle both single string and list of strings
-            if isinstance(input, str):
-                texts = [input]
-            else:
-                texts = input
+            if not COHERE_API_KEY:
+                raise ValueError("COHERE_API_KEY environment variable not set.")
+            if not PINECONE_API_KEY:
+                raise ValueError("PINECONE_API_KEY environment variable not set.")
+
+            print("Initializing Cohere client...")
+            self.cohere_client = cohere.Client(COHERE_API_KEY)
+
+            print("Initializing Pinecone client...")
+            self.pc = Pinecone(api_key=PINECONE_API_KEY)
             
-            # Get embeddings from Cohere
-            response = self.client.embed(
+            self._initialize_index()
+            
+        except Exception as e:
+            raise RuntimeError(f"Failed to initialize PineconeVectorStoreClient: {e}")
+
+    def _initialize_index(self):
+        """Initialize or connect to the Pinecone index."""
+        try:
+            existing_indexes = [index.name for index in self.pc.list_indexes()]
+            
+            if self.index_name not in existing_indexes:
+                print(f"Creating new Pinecone index: {self.index_name}")
+                self.pc.create_index(
+                    name=self.index_name,
+                    dimension=self.dimension,
+                    metric="cosine",
+                    spec=ServerlessSpec(
+                        cloud="aws",
+                        region=PINECONE_ENVIRONMENT
+                    )
+                )
+                time.sleep(5)
+            else:
+                index_info = self.pc.describe_index(self.index_name)
+                current_dimension = index_info.dimension
+                if current_dimension != self.dimension:
+                    print(f"Dimension mismatch detected: existing index has dimension {current_dimension}, expected {self.dimension}.")
+                    print(f"Deleting and recreating index {self.index_name} to fix dimension.")
+                    self.pc.delete_index(self.index_name)
+                    
+                    self.pc.create_index(
+                        name=self.index_name,
+                        dimension=self.dimension,
+                        metric="cosine",
+                        spec=ServerlessSpec(
+                            cloud="aws",
+                            region=PINECONE_ENVIRONMENT
+                        )
+                    )
+                    time.sleep(5)
+
+                print(f"Using existing Pinecone index: {self.index_name}")
+            
+            self.index = self.pc.Index(self.index_name)
+            
+            stats = self.index.describe_index_stats()
+            print(f"Index stats: {stats.get('total_vector_count', 0)} vectors")
+            
+        except Exception as e:
+            raise RuntimeError(f"Failed to initialize Pinecone index: {e}")
+
+    def _generate_embeddings(self, texts: List[str]) -> List[List[float]]:
+        """Generate embeddings using Cohere."""
+        try:
+            response = self.cohere_client.embed(
                 texts=texts,
-                model=self.model_name,
+                model="embed-english-v3.0",
                 input_type="search_document"
             )
             
-            # Extract embeddings and ensure they're in the correct format
-            embeddings = []
-            for embedding in response.embeddings:
-                # Convert to list of floats if it's not already
-                if isinstance(embedding, (list, np.ndarray)):
-                    embeddings.append([float(x) for x in embedding])
-                else:
-                    # Handle other formats that might be returned
-                    embeddings.append([float(x) for x in embedding])
-            
-            return embeddings
+            return [list(map(float, emb)) for emb in response.embeddings]
             
         except Exception as e:
             print(f"Error generating embeddings: {e}")
             raise
 
-class VectorStoreClient:
-    """
-    A client to handle all vector database interactions for the chatbot.
-    """
-    
-    def __init__(self, db_path: str = "./data/vector_db", force_clean: bool = None):
-        """
-        Initializes the vector database client and embedding model.
-        
-        Args:
-            db_path: Path to the ChromaDB database
-            force_clean: If True, deletes the entire DB directory before initialization.
-        """
-        self.db_path = db_path
-        self.max_retries = 3
-        
+    def _generate_query_embedding(self, query_text: str) -> List[float]:
+        """Generate embedding for a query."""
         try:
-            if not COHERE_API_KEY:
-                print(f"Environment variables available: {list(os.environ.keys())}")
-                print(f"COHERE_API_KEY value: {repr(COHERE_API_KEY)}")
-                raise ValueError("COHERE_API_KEY environment variable not set.")
-
-            # Auto-detect deployment environment and force clean
-            if force_clean is None:
-                # Check for deployment environment indicators
-                is_deployment = (
-                    os.getenv('RAILWAY_ENVIRONMENT') is not None or
-                    os.getenv('RENDER') is not None or
-                    os.getenv('HEROKU_APP_NAME') is not None or
-                    os.getenv('VERCEL') is not None or
-                    os.getenv('FORCE_CLEAN_CHROMADB', '').lower() == 'true' or
-                    os.getenv('NODE_ENV') == 'production'
-                )
-                force_clean = is_deployment
-            
-            if force_clean:
-                print("Deployment environment detected - cleaning ChromaDB directory...")
-                self._aggressive_cleanup()
-
-            print("Initializing custom Cohere embedding function...")
-            self.embedding_function = CustomCohereEmbeddingFunction(
-                api_key=COHERE_API_KEY,
-                model_name="embed-english-v3.0"
+            response = self.cohere_client.embed(
+                texts=[query_text],
+                model="embed-english-v3.0",
+                input_type="search_query"
             )
-
-            # Try to initialize with retries
-            self._initialize_with_retries()
             
+            embedding = response.embeddings[0]
+            return list(map(float, embedding))
+                
         except Exception as e:
-            raise RuntimeError(f"Failed to initialize VectorStoreClient after all retries: {e}")
+            print(f"Error generating query embedding: {e}")
+            raise
 
-    def _aggressive_cleanup(self):
-        """Aggressively clean the database directory with multiple strategies."""
-        print(f"Starting aggressive cleanup of {self.db_path}...")
-        
-        # Strategy 1: Standard directory removal
-        if os.path.exists(self.db_path):
-            try:
-                shutil.rmtree(self.db_path)
-                print("✓ Standard directory cleanup successful")
-            except Exception as e:
-                print(f"✗ Standard cleanup failed: {e}")
-        
-        # Strategy 2: Force cleanup with file-by-file removal
-        if os.path.exists(self.db_path):
-            try:
-                self._force_remove_directory(self.db_path)
-                print("✓ Force file-by-file cleanup successful")
-            except Exception as e:
-                print(f"✗ Force cleanup failed: {e}")
-        
-        # Strategy 3: Use temporary directory as new location
-        if os.path.exists(self.db_path):
-            print("Directory still exists, using temporary location...")
-            self.db_path = os.path.join(tempfile.gettempdir(), f"chromadb_{int(time.time())}")
-            print(f"New database path: {self.db_path}")
-        
-        # Strategy 4: Ensure directory is completely clean
-        os.makedirs(self.db_path, exist_ok=True)
-        
-        # Wait a moment for file system to sync
-        time.sleep(0.5)
-
-    def _force_remove_directory(self, path):
-        """Force remove directory by changing permissions and removing files individually."""
-        import stat
-        
-        def handle_remove_readonly(func, path, exc):
-            if os.path.exists(path):
-                os.chmod(path, stat.S_IWRITE)
-                func(path)
-        
-        for root, dirs, files in os.walk(path, topdown=False):
-            # Remove files
-            for file in files:
-                file_path = os.path.join(root, file)
-                try:
-                    os.chmod(file_path, stat.S_IWRITE)
-                    os.remove(file_path)
-                except:
-                    pass
-            
-            # Remove directories
-            for dir in dirs:
-                dir_path = os.path.join(root, dir)
-                try:
-                    os.chmod(dir_path, stat.S_IWRITE)
-                    os.rmdir(dir_path)
-                except:
-                    pass
-        
-        # Finally remove the root directory
+    def clear_index(self):
+        """Clear all vectors from the index."""
         try:
-            os.chmod(path, stat.S_IWRITE)
-            os.rmdir(path)
-        except:
-            pass
-
-    def _initialize_with_retries(self):
-        """Initialize ChromaDB client with multiple retry strategies."""
-        last_error = None
-        
-        for attempt in range(self.max_retries):
-            try:
-                print(f"Initialization attempt {attempt + 1}/{self.max_retries}")
-                print(f"Using ChromaDB path: {self.db_path}")
-                
-                # Create fresh client instance
-                self.client = PersistentClient(path=self.db_path)
-                
-                # Try to create collection directly (skip get_collection check)
-                collection_name = f"products_and_faqs_v{int(time.time())}"  # Use unique name
-                try:
-                    self.collection = self.client.create_collection(
-                        name=collection_name,
-                        embedding_function=self.embedding_function,
-                        get_or_create=True  # This will get if exists or create if not
-                    )
-                    print(f"✓ Successfully created collection: {collection_name}")
-                    return  # Success!
-                
-                except Exception as collection_error:
-                    print(f"Collection creation failed: {collection_error}")
-                    
-                    # Try with get_or_create=False
-                    try:
-                        # Delete any existing collections first
-                        collections = self.client.list_collections()
-                        for col in collections:
-                            try:
-                                self.client.delete_collection(col.name)
-                                print(f"Deleted existing collection: {col.name}")
-                            except:
-                                pass
-                        
-                        # Create new collection
-                        self.collection = self.client.create_collection(
-                            name=collection_name,
-                            embedding_function=self.embedding_function
-                        )
-                        print(f"✓ Successfully created collection after cleanup: {collection_name}")
-                        return  # Success!
-                    
-                    except Exception as retry_error:
-                        last_error = retry_error
-                        print(f"Retry failed: {retry_error}")
-                
-            except Exception as e:
-                last_error = e
-                print(f"Attempt {attempt + 1} failed: {e}")
-                
-                # If this isn't the last attempt, try more aggressive cleanup
-                if attempt < self.max_retries - 1:
-                    print(f"Attempting more aggressive cleanup for retry {attempt + 2}...")
-                    
-                    # Use a completely new path
-                    self.db_path = os.path.join(tempfile.gettempdir(), f"chromadb_retry_{attempt}_{int(time.time())}")
-                    print(f"Switching to new path: {self.db_path}")
-                    os.makedirs(self.db_path, exist_ok=True)
-                    
-                    # Wait before retry
-                    time.sleep(1)
-        
-        # If we get here, all attempts failed
-        raise RuntimeError(f"All {self.max_retries} initialization attempts failed. Last error: {last_error}")
-
-    def _recreate_collection(self):
-        """Delete and recreate the collection to fix dimension mismatches."""
-        try:
-            # Generate unique collection name
-            collection_name = f"products_and_faqs_v{int(time.time())}"
-            
-            # Try to delete any existing collections
-            try:
-                collections = self.client.list_collections()
-                for col in collections:
-                    try:
-                        self.client.delete_collection(col.name)
-                        print(f"Deleted existing collection: {col.name}")
-                    except Exception as e:
-                        print(f"Failed to delete collection {col.name}: {e}")
-            except Exception as e:
-                print(f"Failed to list collections: {e}")
-            
-            # Create a new collection with unique name
-            self.collection = self.client.create_collection(
-                name=collection_name,
-                embedding_function=self.embedding_function
-            )
-            print(f"Created new vector store collection '{collection_name}'.")
-            
+            print("Clearing all vectors from the index...")
+            self.index.delete(delete_all=True)
+            print("Successfully cleared all vectors from the index.")
+            time.sleep(2)
         except Exception as e:
-            raise RuntimeError(f"Failed to recreate collection: {e}")
-
-    def reset_collection(self):
-        """Completely reset the collection - useful for debugging."""
-        print("Resetting collection...")
-        self._recreate_collection()
-        print("Collection reset complete.")
-
-    def force_clean_and_reinitialize(self):
-        """Force clean the entire database and reinitialize from scratch."""
-        print("Force cleaning database and reinitializing...")
-        try:
-            self._aggressive_cleanup()
-            self._initialize_with_retries()
-            print("Database successfully cleaned and reinitialized.")
-        except Exception as e:
-            raise RuntimeError(f"Failed to clean and reinitialize database: {e}")
+            print(f"Failed to clear index: {e}")
 
     def _process_document(self, file_path: str) -> List[Dict]:
         """
-        Processes documents from a given file path, supporting JSON and other formats.
+        Processes documents from a given file path, supporting JSON formats.
         Returns a list of dictionaries with 'document' and 'metadata'.
         """
         documents_to_ingest = []
@@ -331,13 +179,15 @@ class VectorStoreClient:
                         "source": "product",
                         "name": doc.get('name', ''),
                         "category": doc.get('category', 'General'),
-                        "price": doc.get('price', 'N/A'),
+                        "price": str(doc.get('price', 'N/A')),
+                        "type": "product"
                     }
                 elif doc_type == "faq":
                     text_content = f"Question: {doc.get('question', '')}. Answer: {doc.get('answer', '')}"
                     metadata = {
                         "source": "faq",
                         "category": doc.get('category', 'General'),
+                        "type": "faq"
                     }
                 
                 if text_content:
@@ -350,31 +200,20 @@ class VectorStoreClient:
             
         return documents_to_ingest
 
-    def ingest_data(self, knowledge_dir: str, clean_before_ingest: bool = False):
+    def ingest_data(self, knowledge_dir: str, clear_before_ingest: bool = False, batch_size: int = 100):
         """
-        Loads and ingests all supported documents from a directory into the vector store.
+        Loads and ingests all supported documents from a directory into Pinecone.
         
         Args:
             knowledge_dir: Directory containing the knowledge files
-            clean_before_ingest: If True, completely clean the database before ingesting
+            clear_before_ingest: If True, clear the index before ingesting
+            batch_size: Number of vectors to upsert in each batch
         """
         print(f"Starting data ingestion from directory: {knowledge_dir}")
 
-        if clean_before_ingest:
-            print("Cleaning database before ingestion...")
-            self.force_clean_and_reinitialize()
+        if clear_before_ingest:
+            self.clear_index()
 
-        print("Clearing existing data from the vector store...")
-        try:
-            ids = self.collection.get(limit=999999)['ids']
-            if ids:
-                self.collection.delete(ids=ids)
-                print("Successfully cleared all existing data.")
-            else:
-                print("Collection was already empty. No data to clear.")
-        except Exception as e:
-            print(f"Failed to clear existing data: {e}. Attempting to proceed with ingestion.")
-        
         all_documents = []
         for file_path in glob.glob(os.path.join(knowledge_dir, "**/*.json"), recursive=True):
             if os.path.isfile(file_path):
@@ -388,79 +227,134 @@ class VectorStoreClient:
         
         documents = [doc['document'] for doc in all_documents]
         metadatas = [doc['metadata'] for doc in all_documents]
-        ids = [str(uuid.uuid4()) for _ in range(len(documents))]
+        
+        print("Generating embeddings...")
+        embeddings = self._generate_embeddings(documents)
+        
+        vectors = []
+        for i, (doc, metadata, embedding) in enumerate(zip(documents, metadatas, embeddings)):
+            vector_id = str(uuid.uuid4())
+            metadata['text'] = doc
+            vectors.append({
+                'id': vector_id,
+                'values': embedding,
+                'metadata': metadata
+            })
+        
+        print(f"Upserting {len(vectors)} vectors to Pinecone...")
+        for i in range(0, len(vectors), batch_size):
+            batch = vectors[i:i + batch_size]
+            try:
+                self.index.upsert(vectors=batch)
+                print(f"Upserted batch {i//batch_size + 1}/{(len(vectors)-1)//batch_size + 1}")
+            except Exception as e:
+                print(f"Error upserting batch {i//batch_size + 1}: {e}")
+                raise
 
-        try:
-            self.collection.add(
-                documents=documents,
-                metadatas=metadatas,
-                ids=ids,
-            )
-            print(f"Successfully ingested {len(documents)} documents into the vector store.")
-        except Exception as e:
-            if "dimension" in str(e).lower():
-                print(f"Dimension mismatch detected: {e}")
-                print("Attempting to recreate collection with correct dimensions...")
-                self._recreate_collection()
-                # Try again after recreating
-                self.collection.add(
-                    documents=documents,
-                    metadatas=metadatas,
-                    ids=ids,
-                )
-                print(f"Successfully ingested {len(documents)} documents into the recreated vector store.")
-            else:
-                raise e
+        print("Waiting for Pinecone to index new data...")
+        time.sleep(10)
 
-    def query(self, query_text: str, n_results: int = 5, where_filter: dict = None) -> List[Dict]:
+        print(f"Successfully ingested {len(vectors)} documents into Pinecone index '{self.index_name}'.")
+
+    def query(self, query_text: str, n_results: int = 5, filter_dict: Optional[Dict] = None, where_filter: Optional[Dict] = None) -> List[Dict]:
         """
-        Queries the vector store for similar documents with optional metadata filtering.
+        Queries the Pinecone index for similar documents with optional metadata filtering.
         """
-        print(f"Querying vector store for: '{query_text}' with filter: {where_filter}")
+        active_filter = where_filter if where_filter is not None else filter_dict
+        print(f"Querying Pinecone for: '{query_text}' with filter: {active_filter}")
         
         try:
-            results = self.collection.query(
-                query_texts=[query_text],
-                n_results=n_results,
-                where=where_filter,
-                include=['metadatas', 'documents', 'distances']
+            query_embedding = self._generate_query_embedding(query_text)
+            
+            response = self.index.query(
+                vector=query_embedding,
+                top_k=n_results,
+                include_metadata=True,
+                filter=active_filter
             )
             
             formatted_results = []
-            for i in range(len(results["ids"][0])):
+            for match in response.matches:
                 formatted_results.append({
-                    "id": results["ids"][0][i],
-                    "document": results["documents"][0][i],
-                    "metadata": results["metadatas"][0][i],
-                    "score": results["distances"][0][i]
+                    "id": match.id,
+                    "document": match.metadata.get('text', ''),
+                    "metadata": {k: v for k, v in match.metadata.items() if k != 'text'},
+                    "score": float(match.score)
                 })
             
+            print(f"Found {len(formatted_results)} results")
             return formatted_results
-        
+            
         except Exception as e:
-            print(f"An error occurred during vector store query: {e}")
+            print(f"An error occurred during Pinecone query: {e}")
             return []
+
+    def get_index_stats(self) -> Dict:
+        """Get statistics about the index."""
+        try:
+            stats = self.index.describe_index_stats()
+            return {
+                "total_vectors": stats.get('total_vector_count', 0),
+                "dimension": stats.get('dimension', 0),
+                "index_fullness": stats.get('index_fullness', 0)
+            }
+        except Exception as e:
+            print(f"Error getting index stats: {e}")
+            return {}
+
+    def delete_vectors(self, vector_ids: List[str]):
+        """Delete specific vectors by ID."""
+        try:
+            self.index.delete(ids=vector_ids)
+            print(f"Deleted {len(vector_ids)} vectors")
+        except Exception as e:
+            print(f"Error deleting vectors: {e}")
 
 if __name__ == "__main__":
     try:
-        # The client will automatically clean in deployment environments
         client = VectorStoreClient()
+        
+        stats = client.get_index_stats()
+        print(f"Current index stats: {stats}")
         
         knowledge_dir = "./knowledge"
         
-        # Uncomment this line if you want to force reset the collection
-        # client.reset_collection()
+        client.ingest_data(knowledge_dir, clear_before_ingest=True)
         
-        client.ingest_data(knowledge_dir)
+        expected_count = 13
+        print("Waiting for vectors to be indexed...")
+        max_retries = 5
+        retries = 0
+        while True:
+            updated_stats = client.get_index_stats()
+            if updated_stats['total_vectors'] >= expected_count:
+                print(f"Indexing complete. Total vectors: {updated_stats['total_vectors']}")
+                break
+            
+            print(f"Current vector count: {updated_stats['total_vectors']}. Retrying in 10 seconds...")
+            time.sleep(10)
+            retries += 1
+            if retries >= max_retries:
+                print("Max retries reached. Continuing anyway.")
+                break
+        
+        print(f"Updated index stats: {updated_stats}")
         
         print("\nTesting Query...")
         product_results = client.query("velvet armchair dimensions")
         if product_results:
             print("Query Successful. Found relevant documents.")
-            for result in product_results[:2]:  # Show first 2 results
+            for result in product_results[:2]:
                 print(f"Score: {result['score']:.3f} - {result['document'][:100]}...")
         else:
             print("Query failed or no documents found.")
+            
+        print("\nTesting Filtered Query (products only)...")
+        filtered_results = client.query("luxury furniture", filter_dict={"source": "product"})
+        if filtered_results:
+            print("Filtered Query Successful.")
+            for result in filtered_results[:2]:
+                print(f"Score: {result['score']:.3f} - {result['document'][:100]}...")
 
     except Exception as e:
         print(f"A fatal error occurred: {e}")
