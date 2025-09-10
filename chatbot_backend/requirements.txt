@@ -7,9 +7,10 @@ langchain-text-splitters
 langchain-groq
 langchain-google-genai
 cohere
-
-
-chromadb
+pinecone-client
+cohere
+numpy
+pinecone
 fastapi
 starlette
 uvicorn

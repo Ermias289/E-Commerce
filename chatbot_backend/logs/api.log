@@ -56,3 +56,7 @@
 2025-09-10 18:45:53 - chatbot.api - INFO - main.py:121 - Received chat request: hey (session_id=I need help in styling)
 2025-09-10 18:46:18 - chatbot.api - INFO - main.py:121 - Received chat request: hey (session_id=I need help in styling)
 2025-09-10 18:48:22 - chatbot.api - INFO - main.py:121 - Received chat request: hey (session_id=what is the return policy)
+2025-09-10 20:21:55 - chatbot.api - INFO - main.py:69 - Welcome endpoint called
+2025-09-10 20:22:22 - chatbot.api - INFO - main.py:121 - Received chat request: tell me about the rug (session_id=string)
+2025-09-10 20:26:53 - chatbot.api - INFO - main.py:69 - Welcome endpoint called
+2025-09-10 20:27:20 - chatbot.api - INFO - main.py:121 - Received chat request: tell me about the rug (session_id=string)
