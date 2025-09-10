@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from typing import List
+from typing import List, Optional
 import sys
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -25,71 +25,107 @@ from src.chatbot_backend.tools.n8n_tool import send_customer_details
 load_dotenv()
 os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY")
 
+# Global variables to store initialized components
+_agent_executor: Optional[AgentExecutor] = None
 
 def create_agent() -> AgentExecutor:
     """Create and return a LangChain agent executor."""
-    tools: List[BaseTool] = [
-        track_order, 
-        get_style_recommendations, 
-        get_product_info, 
-        send_customer_details
-    ]
-
-    logger.info("Initializing LangChain Agent with Groq LLM...")
-
-    llm = ChatGroq(
-        model_name="llama-3.3-70b-versatile",
-        temperature=0.1,
-        api_key=os.getenv("GROQ_API_KEY")
-    )
-
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", 
-         "You are a helpful customer service AI for 'The Luxe' e-commerce store.\n\n"
-         
-         "For RETURNS/REFUNDS: If customer wants to return something, collect this info step by step:\n"
-         "1. Full name\n"
-         "2. Email address\n" 
-         "3. Phone number\n"
-         "4. Location (city, country)\n"
-         "5. Product to return\n"
-         "Only use send_customer_details tool when you have ALL 5 pieces of info.\n\n"
-         
-         "For ORDER TRACKING: Ask for order ID, then use track_order tool.\n\n"
-         
-         "For STYLING: Use get_style_recommendations tool for design questions.\n\n"
-         
-         "For PRODUCTS: Use get_product_info tool for product details.\n\n"
-         
-         "Remember: Check conversation history to avoid asking for info already provided. "
-         "Be friendly and conversational. Don't mention tool names to users."),
-        
-        MessagesPlaceholder(variable_name="chat_history"),
-        ("human", "{input}"),
-        MessagesPlaceholder(variable_name="agent_scratchpad"),
-    ])
-
+    global _agent_executor
+    
+    # Return existing agent if already initialized
+    if _agent_executor is not None:
+        return _agent_executor
+    
     try:
+        tools: List[BaseTool] = [
+            track_order, 
+            get_style_recommendations, 
+            get_product_info, 
+            send_customer_details
+        ]
+
+        logger.info("Initializing LangChain Agent with Groq LLM...")
+
+        llm = ChatGroq(
+            model_name="llama-3.3-70b-versatile",
+            temperature=0.1,
+            api_key=os.getenv("GROQ_API_KEY"),
+            timeout=30  # Add timeout
+        )
+
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", 
+             "You are a helpful customer service AI for 'The Luxe' e-commerce store.\n\n"
+             
+             "For RETURNS/REFUNDS: If customer wants to return something, collect this info step by step:\n"
+             "1. Full name\n"
+             "2. Email address\n" 
+             "3. Phone number\n"
+             "4. Location (city, country)\n"
+             "5. Product to return\n"
+             "Only use send_customer_details tool when you have ALL 5 pieces of info.\n\n"
+             
+             "For ORDER TRACKING: Ask for order ID, then use track_order tool.\n\n"
+             
+             "For STYLING: Use get_style_recommendations tool for design questions.\n\n"
+             
+             "For PRODUCTS: Use get_product_info tool for product details.\n\n"
+             
+             "Remember: Check conversation history to avoid asking for info already provided. "
+             "Be friendly and conversational. Don't mention tool names to users."),
+            
+            MessagesPlaceholder(variable_name="chat_history"),
+            ("human", "{input}"),
+            MessagesPlaceholder(variable_name="agent_scratchpad"),
+        ])
+
         agent = create_tool_calling_agent(llm, tools, prompt)
         logger.info("LangChain agent created successfully.")
+
+        _agent_executor = AgentExecutor(
+            agent=agent, 
+            tools=tools, 
+            verbose=True,
+            max_iterations=3,
+            max_execution_time=25,  # Reduced timeout for Render
+            return_intermediate_steps=True,
+            early_stopping_method="force",
+            handle_parsing_errors=True
+        )
+        
+        return _agent_executor
+        
     except Exception as e:
         error_logger.error(f"Failed to create agent: {e}", exc_info=True)
         raise
 
-    return AgentExecutor(
-        agent=agent, 
-        tools=tools, 
-        verbose=True,
-        max_iterations=3,
-        max_execution_time=30,
-        return_intermediate_steps=True,
-        early_stopping_method="force",
-        handle_parsing_errors=True
-    )
+def get_agent() -> Optional[AgentExecutor]:
+    """Get the initialized agent executor."""
+    return _agent_executor
 
+def health_check() -> bool:
+    """Check if the agent is properly initialized and ready."""
+    try:
+        if _agent_executor is None:
+            return False
+        
+        # Quick test to ensure agent is responsive
+        test_response = _agent_executor.invoke({
+            "input": "Hello", 
+            "chat_history": []
+        })
+        
+        return bool(test_response.get('output'))
+    except Exception as e:
+        error_logger.error(f"Health check failed: {e}")
+        return False
 
 if __name__ == "__main__":
     agent_executor = create_agent()
+    if not agent_executor:
+        print("Failed to initialize agent")
+        exit(1)
+        
     chat_history = []
     
     print("Agent ready. Type 'exit' to quit.\n")

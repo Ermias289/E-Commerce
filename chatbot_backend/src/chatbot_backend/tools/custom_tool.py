@@ -15,6 +15,25 @@ from services.api_client import EcommerceAPIClient
 # Initialize the API client once at the top level for use in tools
 api_client = EcommerceAPIClient(base_url="http://127.0.0.1:8001")
 
+# Global singleton for vector store client
+_vector_client: Optional[VectorStoreClient] = None
+_vector_client_initialized = False
+
+def get_vector_client() -> VectorStoreClient:
+    """Get singleton vector store client, initializing if needed."""
+    global _vector_client, _vector_client_initialized
+    
+    if not _vector_client_initialized:
+        try:
+            print("Initializing VectorStoreClient singleton...")
+            _vector_client = VectorStoreClient()
+            _vector_client_initialized = True
+            print("VectorStoreClient singleton initialized successfully.")
+        except Exception as e:
+            print(f"Failed to initialize VectorStoreClient: {e}")
+            raise
+    
+    return _vector_client
 
 def extract_style_keywords(query: str) -> List[str]:
     """Extract style-related keywords from the user query."""
@@ -158,8 +177,8 @@ def get_style_recommendations(query: str) -> str:
         return "Please provide details about your style preferences or the room you're decorating."
     
     try:
-        # Initialize vector store client
-        client = VectorStoreClient()
+        # Use singleton vector store client
+        client = get_vector_client()
         
         # Extract style and room keywords from the query
         keywords = extract_style_keywords(query)
@@ -263,7 +282,8 @@ def get_product_info(query: str) -> str:
     Input should be a detailed, natural language query string.
     """
     try:
-        client = VectorStoreClient()
+        # Use singleton vector store client
+        client = get_vector_client()
         
         where_filter = None 
         if "faq" in query.lower() or "question" in query.lower():

@@ -17,3 +17,9 @@
 2025-09-10 00:40:00 - chatbot.api - INFO - main.py:57 - Received chat request: help me style my house (session_id=string)
 2025-09-10 00:46:46 - chatbot.api - INFO - main.py:51 - Welcome endpoint called
 2025-09-10 00:47:08 - chatbot.api - INFO - main.py:57 - Received chat request: jelp me style my house (session_id=string)
+2025-09-10 02:05:16 - chatbot.api - INFO - main.py:51 - Welcome endpoint called
+2025-09-10 02:05:41 - chatbot.api - INFO - main.py:57 - Received chat request: style my bedroom (session_id=string)
+2025-09-10 08:45:14 - chatbot.api - INFO - main.py:51 - Welcome endpoint called
+2025-09-10 08:45:43 - chatbot.api - INFO - main.py:57 - Received chat request: Help me style my house (session_id=string)
+2025-09-10 09:04:13 - chatbot.api - INFO - main.py:58 - Welcome endpoint called
+2025-09-10 09:04:49 - chatbot.api - INFO - main.py:76 - Received chat request: help me style my house (session_id=string)

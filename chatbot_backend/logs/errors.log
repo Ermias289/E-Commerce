@@ -11,3 +11,11 @@ Traceback (most recent call last):
   File "C:\Users\Admin\miniconda3\envs\Ecommerce\Lib\site-packages\langchain\agents\agent.py", line 312, in return_stopped_response
     raise ValueError(msg)
 ValueError: Got unsupported early_stopping_method `generate`
+2025-09-10 09:01:34 - chatbot.main - ERROR - main.py:38 - Failed to initialize agent: Vector store initialization failed
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\src\chatbot_backend\main.py", line 35, in lifespan
+    agent_executor = create_agent()
+                     ^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\src\chatbot_backend\tools\langchain_agent.py", line 65, in create_agent
+    raise Exception("Vector store initialization failed")
+Exception: Vector store initialization failed

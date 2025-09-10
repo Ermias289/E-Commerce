@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List, Optional, Dict
 from src.chatbot_backend.tools.langchain_agent import create_agent
+from src.chatbot_backend.tools.custom_tool import get_vector_client
 from langchain_core.messages import HumanMessage, AIMessage
 from contextlib import asynccontextmanager
 import uuid
@@ -25,6 +26,12 @@ async def lifespan(app: FastAPI):
     global agent_executor
     logger.info("Starting up: Initializing LangChain Agent...")
     try:
+        # Initialize vector store first
+        logger.info("Initializing vector store...")
+        get_vector_client()  # This will initialize the singleton
+        logger.info("Vector store initialized successfully.")
+        
+        # Then initialize agent
         agent_executor = create_agent()
         logger.info("Startup complete: Agent is ready to serve requests.")
     except Exception as e:
@@ -50,6 +57,18 @@ class ChatResponse(BaseModel):
 def welcome():
     api_logger.info("Welcome endpoint called")
     return {"message": "Welcome to The Luxe! How can I assist you today?"}
+
+# Health check endpoint
+@app.get("/health")
+def health_check():
+    """Health check endpoint for deployment platforms."""
+    try:
+        if agent_executor is None:
+            return {"status": "unhealthy", "reason": "Agent not initialized"}
+        return {"status": "healthy", "agent_ready": True}
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+        return {"status": "unhealthy", "reason": str(e)}
 
 # Chat endpoint
 @app.post("/chat", response_model=ChatResponse)
