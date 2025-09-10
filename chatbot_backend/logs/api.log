@@ -51,3 +51,8 @@
 2025-09-10 15:08:15 - chatbot.api - INFO - main.py:93 - Received CrewAI chat request: HELP ME STYLE MY HOUSE (session_id=string)
 2025-09-10 18:26:05 - chatbot.api - INFO - main.py:69 - Welcome endpoint called
 2025-09-10 18:26:39 - chatbot.api - INFO - main.py:121 - Received chat request: hey i need more info on the sofa (session_id=string)
+2025-09-10 18:45:10 - chatbot.api - INFO - main.py:69 - Welcome endpoint called
+2025-09-10 18:45:32 - chatbot.api - INFO - main.py:121 - Received chat request: hey (session_id=string)
+2025-09-10 18:45:53 - chatbot.api - INFO - main.py:121 - Received chat request: hey (session_id=I need help in styling)
+2025-09-10 18:46:18 - chatbot.api - INFO - main.py:121 - Received chat request: hey (session_id=I need help in styling)
+2025-09-10 18:48:22 - chatbot.api - INFO - main.py:121 - Received chat request: hey (session_id=what is the return policy)
