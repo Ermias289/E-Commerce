@@ -2,6 +2,7 @@ import json
 import os
 import glob
 import uuid
+import shutil
 from typing import List, Dict
 from chromadb import PersistentClient
 from chromadb.utils.embedding_functions import CohereEmbeddingFunction
@@ -21,13 +22,29 @@ class VectorStoreClient:
     A client to handle all vector database interactions for the chatbot.
     """
     
-    def __init__(self, db_path: str = "./data/vector_db"):
-        """Initializes the vector database client and embedding model."""
+    def __init__(self, db_path: str = "./data/vector_db", force_clean: bool = None):
+        """
+        Initializes the vector database client and embedding model.
+        
+        Args:
+            db_path: Path to the ChromaDB database
+            force_clean: If True, deletes the entire DB directory before initialization.
+                        If None, checks environment variable FORCE_CLEAN_CHROMADB.
+        """
+        self.db_path = db_path
+        
         try:
             if not COHERE_API_KEY:
                 print(f"Environment variables available: {list(os.environ.keys())}")
                 print(f"COHERE_API_KEY value: {repr(COHERE_API_KEY)}")
                 raise ValueError("COHERE_API_KEY environment variable not set.")
+
+            # Check if we should force clean the database
+            if force_clean is None:
+                force_clean = os.getenv('FORCE_CLEAN_CHROMADB', 'false').lower() == 'true'
+            
+            if force_clean:
+                self._clean_database_directory()
 
             print("Initializing Cohere embedding function...")
             # Use the CohereEmbeddingFunction with explicit model
@@ -51,7 +68,42 @@ class VectorStoreClient:
                 self._recreate_collection()
             
         except Exception as e:
-            raise RuntimeError(f"Failed to initialize VectorStoreClient: {e}")
+            # If initialization fails due to corruption, try cleaning and retrying once
+            if "type" in str(e) or "configuration" in str(e).lower():
+                print(f"Database corruption detected: {e}")
+                print("Attempting to clean and recreate database...")
+                try:
+                    self._clean_and_retry()
+                except Exception as retry_error:
+                    raise RuntimeError(f"Failed to initialize VectorStoreClient after cleanup: {retry_error}")
+            else:
+                raise RuntimeError(f"Failed to initialize VectorStoreClient: {e}")
+
+    def _clean_database_directory(self):
+        """Completely removes the database directory and all its contents."""
+        if os.path.exists(self.db_path):
+            try:
+                shutil.rmtree(self.db_path)
+                print(f"Cleaned database directory: {self.db_path}")
+            except Exception as e:
+                print(f"Warning: Failed to clean database directory: {e}")
+                # Try to clean individual files if directory removal fails
+                try:
+                    for root, dirs, files in os.walk(self.db_path):
+                        for file in files:
+                            os.remove(os.path.join(root, file))
+                    print("Cleaned database files individually")
+                except Exception as inner_e:
+                    print(f"Warning: Failed to clean database files: {inner_e}")
+
+    def _clean_and_retry(self):
+        """Clean the database directory and retry initialization."""
+        self._clean_database_directory()
+        
+        # Retry initialization
+        print("Retrying initialization after cleanup...")
+        self.client = PersistentClient(path=self.db_path)
+        self._recreate_collection()
 
     def _recreate_collection(self):
         """Delete and recreate the collection to fix dimension mismatches."""
@@ -77,6 +129,17 @@ class VectorStoreClient:
         print("Resetting collection...")
         self._recreate_collection()
         print("Collection reset complete.")
+
+    def force_clean_and_reinitialize(self):
+        """Force clean the entire database and reinitialize from scratch."""
+        print("Force cleaning database and reinitializing...")
+        try:
+            self._clean_database_directory()
+            self.client = PersistentClient(path=self.db_path)
+            self._recreate_collection()
+            print("Database successfully cleaned and reinitialized.")
+        except Exception as e:
+            raise RuntimeError(f"Failed to clean and reinitialize database: {e}")
 
     def _process_document(self, file_path: str) -> List[Dict]:
         """
@@ -135,9 +198,19 @@ class VectorStoreClient:
             
         return documents_to_ingest
 
-    def ingest_data(self, knowledge_dir: str):
-        """Loads and ingests all supported documents from a directory into the vector store."""
+    def ingest_data(self, knowledge_dir: str, clean_before_ingest: bool = False):
+        """
+        Loads and ingests all supported documents from a directory into the vector store.
+        
+        Args:
+            knowledge_dir: Directory containing the knowledge files
+            clean_before_ingest: If True, completely clean the database before ingesting
+        """
         print(f"Starting data ingestion from directory: {knowledge_dir}")
+
+        if clean_before_ingest:
+            print("Cleaning database before ingestion...")
+            self.force_clean_and_reinitialize()
 
         print("Clearing existing data from the vector store...")
         try:
@@ -218,7 +291,9 @@ class VectorStoreClient:
 
 if __name__ == "__main__":
     try:
+        # The client will automatically clean in deployment environments
         client = VectorStoreClient()
+        
         knowledge_dir = "./knowledge"
         
         # Uncomment this line if you want to force reset the collection

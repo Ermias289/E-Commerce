@@ -489,3 +489,22 @@ RuntimeError: Failed to initialize VectorStoreClient: COHERE_API_KEY environment
 2025-09-10 15:08:21 - chatbot.main - INFO - crew_tools.py:33 - Getting style recommendations for: To help me style your house, I need some more information. Please tell me: 1. What style are you going for (e.g., modern, farmhouse, bohemian, minimalist)? 2. Which room(s) are you looking to style? 3. What is your budget? 4. Are there any specific colors or materials you prefer or want to avoid? 5. Do you have any existing furniture or decor you'd like to incorporate?
 2025-09-10 15:08:22 - chatbot.main - INFO - crew_tools.py:33 - Getting style recommendations for: To help me style your house, I need some more information. Please tell me: 1. What style are you going for (e.g., modern, farmhouse, bohemian, minimalist)? 2. Which room(s) are you looking to style? 3. What is your budget? 4. Are there any specific colors or materials you prefer or want to avoid? 5. Do you have any existing furniture or decor you'd like to incorporate?
 2025-09-10 18:29:38 - chatbot.main - INFO - main.py:52 - Shutting down: Application is closing.
+2025-09-10 18:44:57 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 18:44:57 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 18:44:57 - chatbot.main - INFO - main.py:30 - Starting up: Initializing LangChain Agent...
+2025-09-10 18:44:57 - chatbot.main - INFO - main.py:33 - Initializing vector store...
+2025-09-10 18:45:00 - chatbot.main - INFO - main.py:35 - Vector store initialized successfully.
+2025-09-10 18:45:00 - chatbot.main - INFO - langchain_agent.py:47 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 18:45:02 - chatbot.main - INFO - langchain_agent.py:83 - LangChain agent created successfully.
+2025-09-10 18:45:02 - chatbot.main - INFO - main.py:39 - LangChain agent created successfully.
+2025-09-10 18:45:02 - chatbot.main - INFO - main.py:42 - Initializing CrewAI service...
+2025-09-10 18:45:02 - chatbot.main - INFO - crew_service.py:38 - Initializing CrewAI service...
+2025-09-10 18:45:02 - chatbot.main - INFO - crew_service.py:89 - Initialized OrderApiTool successfully
+2025-09-10 18:45:02 - chatbot.main - INFO - crew_service.py:89 - Initialized ReturnsTool successfully
+2025-09-10 18:45:02 - chatbot.main - INFO - crew_service.py:89 - Initialized StyleAdvisorTool successfully
+2025-09-10 18:45:02 - chatbot.main - INFO - crew_service.py:89 - Initialized ProductInfoTool successfully
+2025-09-10 18:45:02 - chatbot.main - INFO - crew_service.py:95 - Total tools initialized: 4
+2025-09-10 18:45:02 - chatbot.main - INFO - crew_service.py:66 - CrewAI service initialized successfully
+2025-09-10 18:45:02 - chatbot.main - INFO - main.py:45 - CrewAI service initialized successfully.
+2025-09-10 18:45:02 - chatbot.main - INFO - main.py:47 - Startup complete: Agents are ready to serve requests.
+2025-09-10 19:04:02 - chatbot.main - INFO - main.py:52 - Shutting down: Application is closing.
