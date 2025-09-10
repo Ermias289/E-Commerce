@@ -7,7 +7,9 @@ import tempfile
 import time
 from typing import List, Dict
 from chromadb import PersistentClient
-from chromadb.utils.embedding_functions import CohereEmbeddingFunction
+from chromadb.api.types import EmbeddingFunction, Documents
+import cohere
+import numpy as np
 
 try:
     from dotenv import load_dotenv
@@ -18,6 +20,48 @@ except ImportError:
     print("Or set environment variables manually")
 
 COHERE_API_KEY = os.environ.get("COHERE_API_KEY")
+
+class CustomCohereEmbeddingFunction(EmbeddingFunction):
+    """
+    Custom Cohere embedding function that properly formats embeddings for ChromaDB
+    """
+    def __init__(self, api_key: str, model_name: str = "embed-english-v3.0"):
+        self.client = cohere.Client(api_key)
+        self.model_name = model_name
+    
+    def __call__(self, input: Documents) -> List[List[float]]:
+        """
+        Generate embeddings for the given documents
+        """
+        try:
+            # Handle both single string and list of strings
+            if isinstance(input, str):
+                texts = [input]
+            else:
+                texts = input
+            
+            # Get embeddings from Cohere
+            response = self.client.embed(
+                texts=texts,
+                model=self.model_name,
+                input_type="search_document"
+            )
+            
+            # Extract embeddings and ensure they're in the correct format
+            embeddings = []
+            for embedding in response.embeddings:
+                # Convert to list of floats if it's not already
+                if isinstance(embedding, (list, np.ndarray)):
+                    embeddings.append([float(x) for x in embedding])
+                else:
+                    # Handle other formats that might be returned
+                    embeddings.append([float(x) for x in embedding])
+            
+            return embeddings
+            
+        except Exception as e:
+            print(f"Error generating embeddings: {e}")
+            raise
 
 class VectorStoreClient:
     """
@@ -58,10 +102,10 @@ class VectorStoreClient:
                 print("Deployment environment detected - cleaning ChromaDB directory...")
                 self._aggressive_cleanup()
 
-            print("Initializing Cohere embedding function...")
-            self.embedding_function = CohereEmbeddingFunction(
+            print("Initializing custom Cohere embedding function...")
+            self.embedding_function = CustomCohereEmbeddingFunction(
                 api_key=COHERE_API_KEY,
-                model_name="embed-english-v3.0"  
+                model_name="embed-english-v3.0"
             )
 
             # Try to initialize with retries
