@@ -1,80 +1,21 @@
-# ==========================================
-# AI/ML ORCHESTRATION & FRAMEWORKS
-# ==========================================
 crewai
 crewai-tools
 langchain
 langchain-community
 langchain-core
-langchain-experimental
 langchain-text-splitters
-langchain-openai
 langchain-groq
 langchain-google-genai
-langchain-cohere
-langsmith
 
-# ==========================================
-# AI MODEL PROVIDERS & APIs
-# ==========================================
-openai
-anthropic
-cohere
-groq
-google-generativeai
-google-ai-generativelanguage
-litellm
-instructor
 
-# ==========================================
-# MEMORY & KNOWLEDGE MANAGEMENT
-# ==========================================
-mem0ai
-embedchain
-gptcache
 
-# ==========================================
-# VECTOR DATABASES & SEARCH
-# ==========================================
 chromadb
-chroma-hnswlib
-lancedb
-lance-namespace
-lance-namespace-urllib3-client
-qdrant-client
-
-# ==========================================
-# WEB FRAMEWORK & API
-# ==========================================
 fastapi
 starlette
 uvicorn
-asgiref
 
-# ==========================================
-# DATA PROCESSING & ANALYSIS
-# ==========================================
-pandas
-numpy
-scipy
-scikit-learn
-pyarrow
-
-# ==========================================
-# MACHINE LEARNING & TRANSFORMERS
-# ==========================================
-torch
 transformers
 sentence-transformers
-tokenizers
-tiktoken
-safetensors
-huggingface-hub
-onnxruntime
-
-# ==========================================
-# DOCUMENT PROCESSING
-# ==========================================
 pdfplumber
 pypdf
 pdfminer.six
@@ -82,296 +23,17 @@ pypdfium2
 beautifulsoup4
 pytube
 
-# ==========================================
-# HTTP CLIENTS & NETWORKING
-# ==========================================
-requests
 httpx
 aiohttp
 httpcore
 httptools
 httpx-sse
 
-# ==========================================
-# DATABASE & PERSISTENCE
-# ==========================================
-sqlalchemy
-alembic
-diskcache
 
-# ==========================================
-# VALIDATION & SERIALIZATION
-# ==========================================
 pydantic
-pydantic-settings
-pydantic-core
-marshmallow
-jsonschema
-jsonschema-specifications
-jsonref
-jsonpatch
-jsonpointer
-jsonpickle
-json5
-json-repair
-orjson
 
-# ==========================================
-# AUTHENTICATION & SECURITY
-# ==========================================
-bcrypt
-cryptography
-pyjwt
-
-# ==========================================
-# CLOUD & INFRASTRUCTURE
-# ==========================================
-kubernetes
-docker
-google-api-core
-google-api-python-client
-google-auth
-google-auth-httplib2
-googleapis-common-protos
-
-# ==========================================
-# ASYNC & CONCURRENCY
-# ==========================================
-anyio
-aiosignal
 asyncio
-nest-asyncio
-greenlet
-
-# ==========================================
-# CONFIGURATION & CLI
-# ==========================================
 python-dotenv
-typer
-click
-shellingham
 
-# ==========================================
-# MONITORING & OBSERVABILITY
-# ==========================================
-opentelemetry-api
-opentelemetry-sdk
-opentelemetry-exporter-otlp-proto-common
-opentelemetry-exporter-otlp-proto-grpc
-opentelemetry-exporter-otlp-proto-http
-opentelemetry-instrumentation
-opentelemetry-instrumentation-asgi
-opentelemetry-instrumentation-fastapi
-opentelemetry-proto
-opentelemetry-semantic-conventions
-opentelemetry-util-http
-posthog
-
-# ==========================================
-# UTILITIES & HELPERS
-# ==========================================
-tenacity
-backoff
-rich
-tqdm
-tabulate
-jinja2
-decorator
-humanfriendly
-coloredlogs
-colorama
-deprecation
-durationpy
-overrides
-portalocker
-wrapt
-
-# ==========================================
-# FILE & DATA FORMATS
-# ==========================================
-openpyxl
-et-xmlfile
-pillow
-fastavro
-flatbuffers
-
-# ==========================================
-# TEMPLATE & MARKUP
-# ==========================================
-jinja2
-markupsafe
-markdown-it-py
-mdurl
-
-# ==========================================
-# PARSING & PROCESSING
-# ==========================================
-lxml
-soupsieve
-regex
-pyparsing
-pysbd
-docstring-parser
-
-# ==========================================
-# CACHING & STORAGE
-# ==========================================
-cachetools
-diskcache
-fsspec
-
-# ==========================================
-# NETWORKING PROTOCOLS
-# ==========================================
-h11
-h2
-hpack
-hyperframe
-grpcio
-grpcio-status
-websocket-client
-websockets
-
-# ==========================================
-# ENCODING & COMPRESSION
-# ==========================================
-charset-normalizer
-idna
-uritemplate
-urllib3
-zstandard
-pybase64
-
-# ==========================================
-# CRYPTO & HASHING
-# ==========================================
-mmh3
-cffi
-pycparser
-
-# ==========================================
-# DATE & TIME
-# ==========================================
-python-dateutil
-pytz
-tzdata
-
-# ==========================================
-# MATH & SCIENTIFIC
-# ==========================================
-sympy
-mpmath
-monotonic
-
-# ==========================================
-# SYSTEM & OS
-# ==========================================
-appdirs
-filelock
-filetype
-nodeenv
-pywin32
-
-# ==========================================
-# DEVELOPMENT TOOLS
-# ==========================================
-ipython
-ipython-pygments-lexers
-jedi
-matplotlib-inline
-prompt-toolkit
-pygments
-stack-data
-traitlets
-wcwidth
-executing
-asttokens
-pure-eval
-parso
-
-# ==========================================
-# BUILD & PACKAGING
-# ==========================================
-build
-pyproject-hooks
-tomli
-tomli-w
-packaging
-wheel
-uv
-
-# ==========================================
-# TYPE CHECKING & ANNOTATIONS
-# ==========================================
-annotated-types
-typing-extensions
-typing-inspect
-typing-inspection
-mypy-extensions
-types-requests
-
-# ==========================================
-# TESTING & QUALITY
-# ==========================================
-attrs
-schema
-six
-threadpoolctl
-joblib
-
-# ==========================================
-# BROWSER AUTOMATION
-# ==========================================
-playwright
-browserbase
-stagehand
-pyee
-
-# ==========================================
-# VISUALIZATION & ANALYSIS
-# ==========================================
-networkx
-pyvis
-
-# ==========================================
-# COMPATIBILITY & UTILITIES
-# ==========================================
-importlib-metadata
-importlib-resources
-zipp
-sniffio
-frozenlist
-multidict
-yarl
-propcache
-certifi
-blinker
-distro
-watchfiles
-
-# ==========================================
-# PROTOCOLS & STANDARDS
-# ==========================================
-proto-plus
-protobuf
-pyasn1
-pyasn1-modules
-rsa
 oauthlib
-requests-oauthlib
-requests-toolbelt
-
-# ==========================================
-# DATABASE SPECIFIC
-# ==========================================
-pypika
-mako
-referencing
-rpds-py
-
-# ==========================================
-# MISC LIBRARIES
-# ==========================================
-dataclasses-json
-marshmallow
-jiter
+requests
