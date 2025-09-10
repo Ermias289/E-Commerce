@@ -1,122 +1,39 @@
-# ==========================================
-# CORE AI/ML FRAMEWORKS
-# ==========================================
 crewai
 crewai-tools
 langchain
 langchain-community
 langchain-core
-langchain-openai
+langchain-text-splitters
 langchain-groq
 langchain-google-genai
-langchain-cohere
-langsmith
 
-# ==========================================
-# AI MODEL PROVIDERS
-# ==========================================
-openai
-anthropic
-cohere
-groq
-google-generativeai
-litellm
-instructor
 
-# ==========================================
-# VECTOR DATABASES
-# ==========================================
+
 chromadb
-lancedb
-qdrant-client
-
-# ==========================================
-# WEB FRAMEWORK
-# ==========================================
 fastapi
-uvicorn
 starlette
+uvicorn
 
-# ==========================================
-# DATA PROCESSING
-# ==========================================
-pandas
-numpy
-scipy
-scikit-learn
-
-# ==========================================
-# MACHINE LEARNING
-# ==========================================
-torch
 transformers
 sentence-transformers
-tiktoken
-huggingface-hub
-
-# ==========================================
-# DOCUMENT PROCESSING
-# ==========================================
 pdfplumber
 pypdf
+pdfminer.six
+pypdfium2
 beautifulsoup4
+pytube
 
-# ==========================================
-# HTTP & NETWORKING
-# ==========================================
-requests
 httpx
 aiohttp
+httpcore
+httptools
+httpx-sse
 
-# ==========================================
-# DATABASE
-# ==========================================
-sqlalchemy
-alembic
 
-# ==========================================
-# VALIDATION
-# ==========================================
 pydantic
-pydantic-settings
 
-# ==========================================
-# CONFIGURATION
-# ==========================================
+asyncio
 python-dotenv
-typer
-click
 
-# ==========================================
-# UTILITIES
-# ==========================================
-tenacity
-rich
-tqdm
-jinja2
-
-# ==========================================
-# ESSENTIAL DEPENDENCIES ONLY
-# (Core functionality without problematic packages)
-# ==========================================
-anyio
-attrs
-certifi
-charset-normalizer
-idna
-urllib3
-packaging
-python-dateutil
-pytz
-typing-extensions
-jsonschema
-backoff
-colorama
-cryptography
-bcrypt
-filelock
-frozenlist
-multidict
-yarl
-aiosignal
-sniffio
+oauthlib
+requests
