@@ -67,3 +67,39 @@ ValueError: Got unsupported early_stopping_method `generate`
 2025-09-10 00:45:33 - chatbot.main - INFO - langchain_agent.py:74 - LangChain agent created successfully.
 2025-09-10 00:45:33 - chatbot.main - INFO - main.py:29 - Startup complete: Agent is ready to serve requests.
 2025-09-10 00:48:22 - chatbot.main - INFO - main.py:34 - Shutting down: Application is closing.
+2025-09-10 02:02:10 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 02:02:10 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 02:02:10 - chatbot.main - INFO - main.py:26 - Starting up: Initializing LangChain Agent...
+2025-09-10 02:02:10 - chatbot.main - INFO - langchain_agent.py:38 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 02:02:14 - chatbot.main - INFO - langchain_agent.py:74 - LangChain agent created successfully.
+2025-09-10 02:02:14 - chatbot.main - INFO - main.py:29 - Startup complete: Agent is ready to serve requests.
+2025-09-10 02:17:38 - chatbot.main - INFO - main.py:34 - Shutting down: Application is closing.
+2025-09-10 08:45:01 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 08:45:01 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 08:45:01 - chatbot.main - INFO - main.py:26 - Starting up: Initializing LangChain Agent...
+2025-09-10 08:45:01 - chatbot.main - INFO - langchain_agent.py:38 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 08:45:04 - chatbot.main - INFO - langchain_agent.py:74 - LangChain agent created successfully.
+2025-09-10 08:45:04 - chatbot.main - INFO - main.py:29 - Startup complete: Agent is ready to serve requests.
+2025-09-10 08:51:28 - chatbot.main - INFO - main.py:34 - Shutting down: Application is closing.
+2025-09-10 09:01:26 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 09:01:26 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 09:01:26 - chatbot.main - INFO - main.py:27 - Starting up: Initializing LangChain Agent...
+2025-09-10 09:01:26 - chatbot.main - INFO - main.py:30 - Initializing vector store...
+2025-09-10 09:01:34 - chatbot.main - INFO - main.py:32 - Vector store initialized successfully.
+2025-09-10 09:01:34 - chatbot.main - INFO - langchain_agent.py:35 - Initializing vector store and models...
+2025-09-10 09:01:34 - chatbot.main - ERROR - main.py:38 - Failed to initialize agent: Vector store initialization failed
+Traceback (most recent call last):
+  File "C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\src\chatbot_backend\main.py", line 35, in lifespan
+    agent_executor = create_agent()
+                     ^^^^^^^^^^^^^^
+  File "C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\src\chatbot_backend\tools\langchain_agent.py", line 65, in create_agent
+    raise Exception("Vector store initialization failed")
+Exception: Vector store initialization failed
+2025-09-10 09:03:55 - chatbot.main - INFO - logging_config.py:131 - Logging system initialized successfully
+2025-09-10 09:03:55 - chatbot.main - INFO - logging_config.py:132 - Log files will be stored in: C:\Users\Admin\Desktop\E-Commerce\chatbot_backend\logs
+2025-09-10 09:03:55 - chatbot.main - INFO - main.py:27 - Starting up: Initializing LangChain Agent...
+2025-09-10 09:03:55 - chatbot.main - INFO - main.py:30 - Initializing vector store...
+2025-09-10 09:04:03 - chatbot.main - INFO - main.py:32 - Vector store initialized successfully.
+2025-09-10 09:04:03 - chatbot.main - INFO - langchain_agent.py:47 - Initializing LangChain Agent with Groq LLM...
+2025-09-10 09:04:06 - chatbot.main - INFO - langchain_agent.py:83 - LangChain agent created successfully.
+2025-09-10 09:04:06 - chatbot.main - INFO - main.py:36 - Startup complete: Agent is ready to serve requests.
