@@ -3,6 +3,8 @@ import os
 import glob
 import uuid
 import shutil
+import tempfile
+import time
 from typing import List, Dict
 from chromadb import PersistentClient
 from chromadb.utils.embedding_functions import CohereEmbeddingFunction
@@ -29,9 +31,9 @@ class VectorStoreClient:
         Args:
             db_path: Path to the ChromaDB database
             force_clean: If True, deletes the entire DB directory before initialization.
-                        If None, checks environment variable FORCE_CLEAN_CHROMADB.
         """
         self.db_path = db_path
+        self.max_retries = 3
         
         try:
             if not COHERE_API_KEY:
@@ -39,88 +41,195 @@ class VectorStoreClient:
                 print(f"COHERE_API_KEY value: {repr(COHERE_API_KEY)}")
                 raise ValueError("COHERE_API_KEY environment variable not set.")
 
-            # Check if we should force clean the database
+            # Auto-detect deployment environment and force clean
             if force_clean is None:
-                force_clean = os.getenv('FORCE_CLEAN_CHROMADB', 'false').lower() == 'true'
+                # Check for deployment environment indicators
+                is_deployment = (
+                    os.getenv('RAILWAY_ENVIRONMENT') is not None or
+                    os.getenv('RENDER') is not None or
+                    os.getenv('HEROKU_APP_NAME') is not None or
+                    os.getenv('VERCEL') is not None or
+                    os.getenv('FORCE_CLEAN_CHROMADB', '').lower() == 'true' or
+                    os.getenv('NODE_ENV') == 'production'
+                )
+                force_clean = is_deployment
             
             if force_clean:
-                self._clean_database_directory()
+                print("Deployment environment detected - cleaning ChromaDB directory...")
+                self._aggressive_cleanup()
 
             print("Initializing Cohere embedding function...")
-            # Use the CohereEmbeddingFunction with explicit model
             self.embedding_function = CohereEmbeddingFunction(
                 api_key=COHERE_API_KEY,
                 model_name="embed-english-v3.0"  
             )
 
-            print(f"Initializing ChromaDB persistent client at path: {db_path}...")
-            self.client = PersistentClient(path=db_path)
-            
-            try:
-                self.collection = self.client.get_collection(
-                    name="products_and_faqs",
-                    embedding_function=self.embedding_function
-                )
-                print(f"Using existing vector store collection '{self.collection.name}'.")
-            except Exception as e:
-                print(f"Collection issue detected: {e}")
-                print("Recreating collection with correct embedding dimensions...")
-                self._recreate_collection()
+            # Try to initialize with retries
+            self._initialize_with_retries()
             
         except Exception as e:
-            # If initialization fails due to corruption, try cleaning and retrying once
-            if "type" in str(e) or "configuration" in str(e).lower():
-                print(f"Database corruption detected: {e}")
-                print("Attempting to clean and recreate database...")
-                try:
-                    self._clean_and_retry()
-                except Exception as retry_error:
-                    raise RuntimeError(f"Failed to initialize VectorStoreClient after cleanup: {retry_error}")
-            else:
-                raise RuntimeError(f"Failed to initialize VectorStoreClient: {e}")
+            raise RuntimeError(f"Failed to initialize VectorStoreClient after all retries: {e}")
 
-    def _clean_database_directory(self):
-        """Completely removes the database directory and all its contents."""
+    def _aggressive_cleanup(self):
+        """Aggressively clean the database directory with multiple strategies."""
+        print(f"Starting aggressive cleanup of {self.db_path}...")
+        
+        # Strategy 1: Standard directory removal
         if os.path.exists(self.db_path):
             try:
                 shutil.rmtree(self.db_path)
-                print(f"Cleaned database directory: {self.db_path}")
+                print("✓ Standard directory cleanup successful")
             except Exception as e:
-                print(f"Warning: Failed to clean database directory: {e}")
-                # Try to clean individual files if directory removal fails
-                try:
-                    for root, dirs, files in os.walk(self.db_path):
-                        for file in files:
-                            os.remove(os.path.join(root, file))
-                    print("Cleaned database files individually")
-                except Exception as inner_e:
-                    print(f"Warning: Failed to clean database files: {inner_e}")
-
-    def _clean_and_retry(self):
-        """Clean the database directory and retry initialization."""
-        self._clean_database_directory()
+                print(f"✗ Standard cleanup failed: {e}")
         
-        # Retry initialization
-        print("Retrying initialization after cleanup...")
-        self.client = PersistentClient(path=self.db_path)
-        self._recreate_collection()
+        # Strategy 2: Force cleanup with file-by-file removal
+        if os.path.exists(self.db_path):
+            try:
+                self._force_remove_directory(self.db_path)
+                print("✓ Force file-by-file cleanup successful")
+            except Exception as e:
+                print(f"✗ Force cleanup failed: {e}")
+        
+        # Strategy 3: Use temporary directory as new location
+        if os.path.exists(self.db_path):
+            print("Directory still exists, using temporary location...")
+            self.db_path = os.path.join(tempfile.gettempdir(), f"chromadb_{int(time.time())}")
+            print(f"New database path: {self.db_path}")
+        
+        # Strategy 4: Ensure directory is completely clean
+        os.makedirs(self.db_path, exist_ok=True)
+        
+        # Wait a moment for file system to sync
+        time.sleep(0.5)
+
+    def _force_remove_directory(self, path):
+        """Force remove directory by changing permissions and removing files individually."""
+        import stat
+        
+        def handle_remove_readonly(func, path, exc):
+            if os.path.exists(path):
+                os.chmod(path, stat.S_IWRITE)
+                func(path)
+        
+        for root, dirs, files in os.walk(path, topdown=False):
+            # Remove files
+            for file in files:
+                file_path = os.path.join(root, file)
+                try:
+                    os.chmod(file_path, stat.S_IWRITE)
+                    os.remove(file_path)
+                except:
+                    pass
+            
+            # Remove directories
+            for dir in dirs:
+                dir_path = os.path.join(root, dir)
+                try:
+                    os.chmod(dir_path, stat.S_IWRITE)
+                    os.rmdir(dir_path)
+                except:
+                    pass
+        
+        # Finally remove the root directory
+        try:
+            os.chmod(path, stat.S_IWRITE)
+            os.rmdir(path)
+        except:
+            pass
+
+    def _initialize_with_retries(self):
+        """Initialize ChromaDB client with multiple retry strategies."""
+        last_error = None
+        
+        for attempt in range(self.max_retries):
+            try:
+                print(f"Initialization attempt {attempt + 1}/{self.max_retries}")
+                print(f"Using ChromaDB path: {self.db_path}")
+                
+                # Create fresh client instance
+                self.client = PersistentClient(path=self.db_path)
+                
+                # Try to create collection directly (skip get_collection check)
+                collection_name = f"products_and_faqs_v{int(time.time())}"  # Use unique name
+                try:
+                    self.collection = self.client.create_collection(
+                        name=collection_name,
+                        embedding_function=self.embedding_function,
+                        get_or_create=True  # This will get if exists or create if not
+                    )
+                    print(f"✓ Successfully created collection: {collection_name}")
+                    return  # Success!
+                
+                except Exception as collection_error:
+                    print(f"Collection creation failed: {collection_error}")
+                    
+                    # Try with get_or_create=False
+                    try:
+                        # Delete any existing collections first
+                        collections = self.client.list_collections()
+                        for col in collections:
+                            try:
+                                self.client.delete_collection(col.name)
+                                print(f"Deleted existing collection: {col.name}")
+                            except:
+                                pass
+                        
+                        # Create new collection
+                        self.collection = self.client.create_collection(
+                            name=collection_name,
+                            embedding_function=self.embedding_function
+                        )
+                        print(f"✓ Successfully created collection after cleanup: {collection_name}")
+                        return  # Success!
+                    
+                    except Exception as retry_error:
+                        last_error = retry_error
+                        print(f"Retry failed: {retry_error}")
+                
+            except Exception as e:
+                last_error = e
+                print(f"Attempt {attempt + 1} failed: {e}")
+                
+                # If this isn't the last attempt, try more aggressive cleanup
+                if attempt < self.max_retries - 1:
+                    print(f"Attempting more aggressive cleanup for retry {attempt + 2}...")
+                    
+                    # Use a completely new path
+                    self.db_path = os.path.join(tempfile.gettempdir(), f"chromadb_retry_{attempt}_{int(time.time())}")
+                    print(f"Switching to new path: {self.db_path}")
+                    os.makedirs(self.db_path, exist_ok=True)
+                    
+                    # Wait before retry
+                    time.sleep(1)
+        
+        # If we get here, all attempts failed
+        raise RuntimeError(f"All {self.max_retries} initialization attempts failed. Last error: {last_error}")
 
     def _recreate_collection(self):
         """Delete and recreate the collection to fix dimension mismatches."""
         try:
-            # Try to delete the existing collection
-            try:
-                self.client.delete_collection(name="products_and_faqs")
-                print("Deleted existing collection with incorrect dimensions.")
-            except Exception as e:
-                print(f"No existing collection to delete or deletion failed: {e}")
+            # Generate unique collection name
+            collection_name = f"products_and_faqs_v{int(time.time())}"
             
-            # Create a new collection
+            # Try to delete any existing collections
+            try:
+                collections = self.client.list_collections()
+                for col in collections:
+                    try:
+                        self.client.delete_collection(col.name)
+                        print(f"Deleted existing collection: {col.name}")
+                    except Exception as e:
+                        print(f"Failed to delete collection {col.name}: {e}")
+            except Exception as e:
+                print(f"Failed to list collections: {e}")
+            
+            # Create a new collection with unique name
             self.collection = self.client.create_collection(
-                name="products_and_faqs",
+                name=collection_name,
                 embedding_function=self.embedding_function
             )
-            print(f"Created new vector store collection '{self.collection.name}' with correct dimensions.")
+            print(f"Created new vector store collection '{collection_name}'.")
+            
         except Exception as e:
             raise RuntimeError(f"Failed to recreate collection: {e}")
 
@@ -134,9 +243,8 @@ class VectorStoreClient:
         """Force clean the entire database and reinitialize from scratch."""
         print("Force cleaning database and reinitializing...")
         try:
-            self._clean_database_directory()
-            self.client = PersistentClient(path=self.db_path)
-            self._recreate_collection()
+            self._aggressive_cleanup()
+            self._initialize_with_retries()
             print("Database successfully cleaned and reinitialized.")
         except Exception as e:
             raise RuntimeError(f"Failed to clean and reinitialize database: {e}")
