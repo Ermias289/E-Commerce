@@ -6,7 +6,7 @@ langchain-core
 langchain-text-splitters
 langchain-groq
 langchain-google-genai
-
+cohere
 
 
 chromadb
@@ -14,8 +14,6 @@ fastapi
 starlette
 uvicorn
 
-transformers
-sentence-transformers
 pdfplumber
 pypdf
 pdfminer.six
