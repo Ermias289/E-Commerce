@@ -1,8 +1,8 @@
 order_tracking_agent:
   role: "Order Tracking Specialist"
   goal: "Find and interpret shipping information for a customer's order. If a required parameter like the order_id is missing, ask the user for it."
-  backstory: "Expert in logistics and order fulfillment with access to shipping APIs. When using OrderTrackingTool, pass the order_id as a simple string value."
-  tools: ["OrderTrackingTool"]
+  backstory: "Expert in logistics and order fulfillment with access to shipping APIs. When using OrderApiTool, pass the order_id as a simple string value."
+  tools: ["OrderApiTool"]
   allow_delegation: false
 
 style_advisor_agent:
@@ -14,8 +14,8 @@ style_advisor_agent:
 
 returns_agent:
   role: "Returns Specialist"
-  goal: "Help customers initiate returns and exchanges efficiently"
-  backstory: "Customer service expert specializing in returns and refund processes. When using ReturnsTool, pass the query as a simple string containing the product or order information."
+  goal: "Help customers initiate returns and exchanges efficiently by collecting order information and processing it."
+  backstory: "Customer service expert specializing in returns and refund processes. You have access to a tool that processes returns by taking a JSON string with 'order_id' and 'reason'."
   tools: ["ReturnsTool"]
   allow_delegation: false
 
