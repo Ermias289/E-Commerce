@@ -10,7 +10,7 @@ This blueprint outlines the full AI system architecture for the LUXE e-commerce 
 * **CrewAI Orchestrator** – coordinates multi-agent workflows.
 * **Specialized Agents** – each agent is focused on a domain (style, orders, returns).
 * **MCP Tools** – standardized APIs that connect AI → real data/services.
-* **Vector Database (RAG)** – powers semantic search for products & FAQs.
+* **Vector Database (Pinecone, RAG)** – powers semantic search for products & FAQs.
 
 ---
 
@@ -25,7 +25,7 @@ flowchart TB
     RT -->|Simple FAQ Product| LC[LangChain Agent]
     RT -->|Complex Multi-step| CR[CrewAI Orchestrator]
 
-    LC --> VDB[(Vector DB - Product Embeddings)]
+    LC --> VDB[(Pinecone Vector DB - Product Embeddings)]
     LC --> FAQ[Knowledge Base - Home Decor FAQs]
 
     CR --> SA[Style Advisor Agent]
@@ -43,14 +43,17 @@ flowchart TB
 ## 3. CrewAI Agents & Roles
 
 * **Style Advisor Agent**
+
   * Suggests products that match user's room, mood board, or dimensions.
-  * Uses vector DB + product metadata.
+  * Uses Pinecone vector DB + product metadata.
 
 * **Order Tracking Agent**
+
   * Fetches order + shipping status.
   * Calls: `get_order_status(order_id)`.
 
 * **Returns Agent**
+
   * Starts a return process.
   * Calls: `initiate_return(order_id)` via n8n automation.
 
@@ -77,18 +80,22 @@ def initiate_return(order_id: str) -> str
 ## 5. Data Flow Examples
 
 1. **FAQ Question**
+
    * User: "How do I clean velvet?"
    * Router → LangChain Agent → Knowledge Base → Returns FAQ Answer.
 
 2. **Product Search**
+
    * User: "Show me round wooden coffee tables."
-   * LangChain Agent → `search_products()` → Vector DB → Suggests items.
+   * LangChain Agent → `search_products()` → Pinecone Vector DB → Suggests items.
 
 3. **Order Tracking**
+
    * User: "Where's my order #9876?"
    * Router → CrewAI Orchestrator → OrderTrackingAgent → E-commerce API + Shipping API → Returns formatted response.
 
 4. **Return Request**
+
    * User: "I want to return my chair."
    * Router → CrewAI Orchestrator → ReturnsAgent → `initiate_return()` → n8n triggers → User gets email + return label.
 
