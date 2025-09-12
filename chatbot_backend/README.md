@@ -39,7 +39,7 @@ This repository contains the **backend system** for **The Luxe** e-commerce plat
 * **CrewAI**: Agent-based automation for customer service tasks
 * **LangChain**: Conversational AI agent using Groq LLM
 * **Groq LLM** (`llama-3.3-70b-versatile`)
-* **Vector Database**: Chroma for product & FAQ embeddings
+* **Vector Database**: pinecone and cohere for product & FAQ embeddings
 * **FastAPI**: API service (via `mock_api.py`)
 * **Pydantic**: Data validation for tools
 * **YAML**: Configuration files for agents & tasks
@@ -65,10 +65,6 @@ This repository contains the **backend system** for **The Luxe** e-commerce plat
 │   └── AI_System_Blueprint.md
 ├── logs/                 # Rotating log files
 ├── knowledge/            # Product & FAQ JSONs
-│   ├── vector_db/        # Chroma vector DB storage
-│   │   ├── 1c356ee7-.../
-│   │   ├── 1fb341a3-.../
-│   │   └── chroma.sqlite3
 │   ├── categories.json
 │   ├── faqs.json
 │   ├── interaction_examples.json
@@ -263,7 +259,7 @@ print(service.process_query('{"name":"John Doe","phone":"123456789","email":"joh
   * `GROQ_API_KEY` – Groq LLM API
   * `GOOGLE_API_KEY` – Gemini LLM API
 * **YAML config:** `src/chatbot_backend/config/agents.yaml` & `tasks.yaml` define agent roles, tools, and expected outputs.
-* **Vector DB:** Located at `knowledge/vector_db/`.
+
 
 ---
 
