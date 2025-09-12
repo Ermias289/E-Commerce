@@ -15,6 +15,7 @@ Style Recommendations – Offers personalized product suggestions based on user 
 Product Information Retrieval – Delivers detailed product details, specifications, and FAQ responses using retrieval-augmented generation (RAG).
 
 The architecture is modular, scalable, and containerized, allowing for the easy addition of new agents, tools, or data sources, making it a robust foundation for a next-generation luxury e-commerce experience.
+
 ---
 
 ## Table of Contents
