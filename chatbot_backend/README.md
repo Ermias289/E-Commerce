@@ -214,7 +214,7 @@ print(response['output'])
 ## Vector Database
 
 * Stores **product information**, **FAQs**, and **embeddings** for fast retrieval.
-* Uses **Chroma SQLite3-based vector DB**.
+* Uses **pinecone, an API based vectordb**.
 * Each document has metadata fields like `name`, `price`, `category`, and `source`.
 * Tools query the vector DB to provide recommendations and answers.
 
