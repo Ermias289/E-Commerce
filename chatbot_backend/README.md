@@ -133,6 +133,8 @@ pip install -r requirements.txt
 # Set environment variables in .env
 GROQ_API_KEY=<your-groq-api-key>
 GOOGLE_API_KEY=<your-google-api-key>
+PINECONE_API_KEY=<your-pinecone-api-key>
+PINECONE_ENVIRONMENT=<your -pinecone-environment>
 ```
 
 ---
