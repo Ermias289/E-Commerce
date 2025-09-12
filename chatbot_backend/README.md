@@ -258,6 +258,8 @@ print(service.process_query('{"name":"John Doe","phone":"123456789","email":"joh
 
   * `GROQ_API_KEY` – Groq LLM API
   * `GOOGLE_API_KEY` – Gemini LLM API
+  * `PINECONE_API_KEY` - Pinecone key
+  * `PINECONE_ENVIRONMENT`- pinecone environment
 * **YAML config:** `src/chatbot_backend/config/agents.yaml` & `tasks.yaml` define agent roles, tools, and expected outputs.
 
 
