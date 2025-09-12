@@ -11,13 +11,23 @@ style_recommendation_task:
   tools: ["StyleAdvisorTool"]
 
 return_process_task:
-  description: "Provide clear instructions on how to initiate a return, including any necessary policy details."
-  expected_output: "A detailed, step-by-step guide on the return process, including eligibility criteria and refund options."
+  description: |
+    Process a customer's return request by collecting all necessary information (name, phone, email, product, and location) and submitting it via the 'returns_processing' tool.
+    
+    If the customer's query does not contain all the required details, you MUST ask for the missing information before you can use the tool.
+    
+    Once you have all the information, you MUST use the 'returns_processing' tool with a JSON input.
+    
+    The final output should be the result from the tool's execution. Do NOT provide generic return policy information.
+  expected_output: |
+    A confirmation message from the returns_processing tool indicating the return request has been submitted successfully, or a clear error message explaining why it failed.
   agent_role: "Returns Specialist"
   tools: ["ReturnsTool"]
 
 product_info_task:
-  description: "Answer a customer's query about a specific product's details. You must use the Product Info Tool to find the information."
+  description: |
+    Answer a customer's query about a specific product's details. You MUST use the Product Info Tool to find the information. 
+    The tool requires a single string as input for its 'query' argument. DO NOT pass a dictionary or any other complex data structure to the tool.
   expected_output: "A concise and accurate response containing the product's dimensions, materials, and other relevant details."
   agent_role: "Product Information Specialist"
   tools: ["ProductInfoTool"]

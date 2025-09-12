@@ -8,6 +8,8 @@ from langchain_core.messages import HumanMessage, AIMessage
 from contextlib import asynccontextmanager
 import uuid
 
+from src.chatbot_backend.crew_service import get_crew_service, CrewAIService 
+
 # Import centralized logging
 from logging_config import setup_logging
 
@@ -18,22 +20,31 @@ api_logger = loggers['api']
 
 # Global variables
 agent_executor = None
+crew_service: Optional[CrewAIService] = None 
 sessions: Dict[str, List] = {}
 
 # Lifespan: Initialize and shutdown agent
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global agent_executor
+    global agent_executor, crew_service 
     logger.info("Starting up: Initializing LangChain Agent...")
     try:
         # Initialize vector store first
         logger.info("Initializing vector store...")
-        get_vector_client()  # This will initialize the singleton
+        get_vector_client()  
         logger.info("Vector store initialized successfully.")
-        
-        # Then initialize agent
+
+        # Initializing LangChain agent
         agent_executor = create_agent()
-        logger.info("Startup complete: Agent is ready to serve requests.")
+        logger.info("LangChain agent created successfully.")
+        
+        # Initializing CrewAI service
+        logger.info("Initializing CrewAI service...")
+        crew_service = get_crew_service()
+        crew_service.initialize()
+        logger.info("CrewAI service initialized successfully.")
+        
+        logger.info("Startup complete: Agents are ready to serve requests.")
     except Exception as e:
         logger.error(f"Failed to initialize agent: {e}", exc_info=True)
         raise
@@ -43,7 +54,7 @@ async def lifespan(app: FastAPI):
 # FastAPI app
 app = FastAPI(title="The Luxe", lifespan=lifespan)
 
-# Pydantic models
+# Pydantic models for request and response
 class ChatRequest(BaseModel):
     query: str
     session_id: Optional[str] = None
@@ -63,12 +74,46 @@ def welcome():
 def health_check():
     """Health check endpoint for deployment platforms."""
     try:
-        if agent_executor is None:
-            return {"status": "unhealthy", "reason": "Agent not initialized"}
-        return {"status": "healthy", "agent_ready": True}
+        langchain_ready = agent_executor is not None
+        # Checking if crew_service is initialized correctly
+        crew_ready = crew_service and crew_service._initialized
+        
+        return {
+            "status": "healthy" if langchain_ready and crew_ready else "partial",
+            "langchain_agent_ready": langchain_ready,
+            "crew_service_ready": crew_ready
+        }
     except Exception as e:
         logger.error(f"Health check failed: {e}")
         return {"status": "unhealthy", "reason": str(e)}
+
+# CrewAI endpoint
+@app.post("/crew", response_model=ChatResponse)
+async def chat_with_crew(request: ChatRequest):
+    api_logger.info(f"Received CrewAI chat request: {request.query} (session_id={request.session_id})")
+    try:
+        
+        if not crew_service or not crew_service._initialized:
+            return ChatResponse(
+                response="CrewAI service is not available. Please try the regular chat endpoint.",
+                session_id=request.session_id or str(uuid.uuid4())
+            )
+        
+        # Process with CrewAI
+        result = crew_service.process_query(request.query)
+        
+        # Create or get session for consistency
+        session_id = request.session_id or str(uuid.uuid4())
+        
+        api_logger.debug(f"CrewAI response: {result}")
+        return ChatResponse(response=result, session_id=session_id)
+
+    except Exception as e:
+        logger.error(f"Error in CrewAI endpoint: {e}", exc_info=True)
+        return ChatResponse(
+            response="I encountered an error processing your request. Please try again.",
+            session_id=request.session_id or str(uuid.uuid4())
+        )
 
 # Chat endpoint
 @app.post("/chat", response_model=ChatResponse)
@@ -88,7 +133,6 @@ async def chat_with_agent(request: ChatRequest):
         # Aggregate intermediate tool outputs + final agent output
         full_output = ""
         for step in result.get("intermediate_steps", []):
-            # step = (tool, observation)
             tool_name, observation = step
             if observation:
                 full_output += str(observation) + " "
@@ -99,7 +143,7 @@ async def chat_with_agent(request: ChatRequest):
         # Update session history
         chat_history.append(HumanMessage(content=request.query))
         chat_history.append(AIMessage(content=full_output))
-        sessions[session_id] = chat_history[-10:]  # Keep last 10 messages
+        sessions[session_id] = chat_history[-10:]  # keeping last 10 messages
 
         api_logger.debug(f"Agent final output: {full_output}")
         return ChatResponse(response=full_output, session_id=session_id)
