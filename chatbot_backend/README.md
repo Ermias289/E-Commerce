@@ -1,7 +1,20 @@
 # Luxe E-Commerce AI Backend
 
-This repository contains the **backend system** for **The Luxe** e-commerce platform. The system combines **CrewAI** for task-specific agents, **LangChain** for conversational AI, and a **vector database** for product search. It is designed to provide **automated customer support**, **order tracking**, **returns management**, **style recommendations**, and **product information**.
+This repository hosts the backend system for The Luxe e-commerce platform, designed to deliver an intelligent, AI-powered customer support experience. The system integrates multiple cutting-edge technologies: CrewAI orchestrates task-specific agents for complex workflows, LangChain powers conversational AI for FAQs and product recommendations, and a Pinecone vector database enables semantic search across products and knowledge bases.
 
+Key functionalities include:
+
+Automated Customer Support – Handles user queries seamlessly with multi-step reasoning.
+
+Order Tracking – Provides real-time order and shipping status updates.
+
+Returns Management – Guides users through the return process, triggering automated workflows via n8n.
+
+Style Recommendations – Offers personalized product suggestions based on user preferences and room context.
+
+Product Information Retrieval – Delivers detailed product details, specifications, and FAQ responses using retrieval-augmented generation (RAG).
+
+The architecture is modular, scalable, and containerized, allowing for the easy addition of new agents, tools, or data sources, making it a robust foundation for a next-generation luxury e-commerce experience.
 ---
 
 ## Table of Contents
